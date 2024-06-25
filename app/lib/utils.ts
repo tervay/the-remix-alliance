@@ -1,12 +1,7 @@
+import type { Params } from "@remix-run/react";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {
-  Event,
-  EventAlliance,
-  EventMatch,
-  EventRankings,
-  Team,
-} from "@/lib/TBATypes";
+import type { Match } from "~/api";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,43 +16,11 @@ export function getTba(endpoint: string): ReturnType<typeof fetch> {
   });
 }
 
-export function getTbaEvents(year: number): Promise<Event[]> {
-  return getTba(`events/${year}`).then<Event[]>((res) => res.json());
-}
-
-export function getTbaEvent(eventKey: string): Promise<Event> {
-  return getTba(`event/${eventKey}`).then<Event>((res) => res.json());
-}
-
-export function getTbaEventAlliances(
-  eventKey: string
-): Promise<EventAlliance[]> {
-  return getTba(`event/${eventKey}/alliances`).then<EventAlliance[]>((res) =>
-    res.json()
-  );
-}
-
-export function getTbaEventRankings(eventKey: string): Promise<EventRankings> {
-  return getTba(`event/${eventKey}/rankings`).then<EventRankings>((res) =>
-    res.json()
-  );
-}
-
-export function getTbaEventMatches(eventKey: string): Promise<EventMatch[]> {
-  return getTba(`event/${eventKey}/matches`).then<EventMatch[]>((res) =>
-    res.json()
-  );
-}
-
-export function getTbaEventTeams(eventKey: string): Promise<Team[]> {
-  return getTba(`event/${eventKey}/teams`).then<Team[]>((res) => res.json());
-}
-
 export function parseDateString(date: string) {
   return new Date(date);
 }
 
-export function sortMatchComparator(a: EventMatch, b: EventMatch) {
+export function sortMatchComparator(a: Match, b: Match) {
   const compLevelValues: Record<string, number> = {
     f: 5,
     sf: 4,
@@ -75,6 +38,25 @@ export function sortMatchComparator(a: EventMatch, b: EventMatch) {
   return a.set_number - b.set_number || a.match_number - b.match_number;
 }
 
-export function sortMatches(matches: EventMatch[]) {
+export function sortMatches(matches: Match[]) {
   return matches.sort(sortMatchComparator);
+}
+
+export function getCurrentDefaultYear() {
+  return 2024;
+}
+
+export function parseParamsForYearElseDefault(
+  params: Params<string>,
+): number | undefined {
+  if (params.year === undefined) {
+    return getCurrentDefaultYear();
+  }
+
+  const year = Number(params.year);
+  if (Number.isNaN(year) || year <= 0) {
+    return undefined;
+  }
+
+  return year;
 }
