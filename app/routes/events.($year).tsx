@@ -1,12 +1,24 @@
-import { parseDateString, parseParamsForYearElseDefault } from "@/lib/utils";
+import {
+  getAllYears,
+  getCurrentDefaultYear,
+  parseDateString,
+  parseParamsForYearElseDefault,
+} from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import { groupBy } from "lodash-es";
 import { promiseHash } from "remix-utils/promise";
-import { getEventsByYear } from "~/api";
-import type { Event } from "~/api";
+import { type Event, EventService } from "~/api/requests";
 import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -30,7 +42,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   return json(
     await promiseHash({
-      events: getEventsByYear({ year }),
+      events: EventService.getEventsByYear({ year }),
       year: Promise.resolve(year),
     }),
   );
@@ -60,7 +72,9 @@ function WeeklyEventTable({ events, week }: { events: Event[]; week: string }) {
               <TableRow key={event.key} className="even:bg-gray-100">
                 <TableCell>
                   <div className="flex flex-col">
-                    <Link to={`/event/${event.key}`}>{event.name}</Link>
+                    <Link to={`/event/${event.key}`} prefetch="viewport">
+                      {event.name}
+                    </Link>
                     <div>
                       {event.city}, {event.state_prov}, {event.country}
                     </div>
@@ -102,28 +116,53 @@ export default function Events() {
 
   return (
     <>
-      <div className="flex items-end">
-        <h1 className="text-4xl pr-2">
-          <i>FIRST</i> Robotics Competition Events
-        </h1>
-        <div className="text-2xl text-gray-500">{events.length} Events</div>
+      <div className="flex flex-row">
+        <div className="md:basis-1/5 hidden md:block">
+          <div className="fixed">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"outline"}>{year}</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {getAllYears()
+                  .reverse()
+                  .map((y) => (
+                    <DropdownMenuItem key={y} asChild>
+                      <Link to={`/events/${y}`} prefetch="viewport">
+                        {y}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+
+        <div className="basis-4/5">
+          <div className="flex items-end">
+            <h1 className="text-4xl pr-2">
+              <i>FIRST</i> Robotics Competition Events
+            </h1>
+            <div className="text-2xl text-gray-500">{events.length} Events</div>
+          </div>
+
+          {Object.entries(groupedWeeklyEvents).map(([week, events]) => (
+            <WeeklyEventTable key={week} events={events} week={week} />
+          ))}
+
+          {cmpEvents.length > 0 && (
+            <WeeklyEventTable events={cmpEvents} week="CMP" />
+          )}
+
+          {preseasonEvents.length > 0 && (
+            <WeeklyEventTable events={preseasonEvents} week="PRE" />
+          )}
+
+          {offseasonEvents.length > 0 && (
+            <WeeklyEventTable events={offseasonEvents} week="OFF" />
+          )}
+        </div>
       </div>
-
-      {Object.entries(groupedWeeklyEvents).map(([week, events]) => (
-        <WeeklyEventTable key={week} events={events} week={week} />
-      ))}
-
-      {cmpEvents.length > 0 && (
-        <WeeklyEventTable events={cmpEvents} week="CMP" />
-      )}
-
-      {preseasonEvents.length > 0 && (
-        <WeeklyEventTable events={preseasonEvents} week="PRE" />
-      )}
-
-      {offseasonEvents.length > 0 && (
-        <WeeklyEventTable events={offseasonEvents} week="OFF" />
-      )}
     </>
   );
 }

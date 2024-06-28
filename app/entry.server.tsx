@@ -23,10 +23,6 @@ const ABORT_DELAY = 5_000;
 //   },
 // });
 
-OpenAPI.BASE = "https://thebluealliance.com/api/v3";
-OpenAPI.HEADERS = {
-  "X-TBA-Auth-Key": import.meta.env.VITE_TBA_AUTH_KEY,
-};
 
 export default function handleRequest(
   request: Request,

@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Event_Ranking } from "~/api";
+import type { Event_Ranking } from "~/api/requests";
 import { DataTable } from "~/components/tba/dataTable";
 
 type RankingColumnType = ColumnDef<Event_Ranking["rankings"][number]>[];

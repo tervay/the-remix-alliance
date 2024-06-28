@@ -7,13 +7,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getTba(endpoint: string): ReturnType<typeof fetch> {
-  return fetch(`https://www.thebluealliance.com/api/v3/${endpoint}`, {
-    headers: {
-      "X-TBA-Auth-Key":
-        "kfh5fzZbU7MFkDhl7CwLGMSVDf0M4GmeO5SkiLmCFzseQ8dJAPHWLHCisSWMoNJC",
-    },
-  });
+export function range(start: number, end: number) {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
 export function parseDateString(date: string) {
@@ -40,6 +35,10 @@ export function sortMatchComparator(a: Match, b: Match) {
 
 export function sortMatches(matches: Match[]) {
   return matches.sort(sortMatchComparator);
+}
+
+export function getAllYears() {
+  return range(1992, getCurrentDefaultYear());
 }
 
 export function getCurrentDefaultYear() {

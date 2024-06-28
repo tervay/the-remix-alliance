@@ -10,7 +10,7 @@
 		}
 	},
 	"files": {
-		"ignore": ["build/**", "app/api/**", "app/entry.*.tsx"]
+		"ignore": ["build/**", "./app/api", "app/entry.*.tsx"]
 	},
 	"javascript": {
 		"formatter": {

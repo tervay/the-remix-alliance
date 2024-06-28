@@ -7,8 +7,13 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { OpenAPI } from "~/api/requests";
 
 const queryClient = new QueryClient();
+OpenAPI.BASE = "https://www.thebluealliance.com/api/v3";
+OpenAPI.HEADERS = {
+  "X-TBA-Auth-Key": import.meta.env.VITE_TBA_AUTH_KEY,
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
