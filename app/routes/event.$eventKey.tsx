@@ -48,23 +48,25 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return json(
     await promiseHash({
       event: EventService.getEvent({ eventKey: params.eventKey }),
+      matches: EventService.getEventMatches({ eventKey: params.eventKey }),
+      alliances: EventService.getEventAlliances({ eventKey: params.eventKey }),
     }),
   );
 }
 export default function Event() {
-  const { event } = useLoaderData<typeof loader>();
+  const { event, matches, alliances } = useLoaderData<typeof loader>();
   const startDate = parseDateString(event.start_date);
   const endDate = parseDateString(event.end_date);
 
-  const matchesQuery = useEventServiceGetEventMatches({ eventKey: event.key });
+  // const matchesQuery = useEventServiceGetEventMatches({ eventKey: event.key });
   const oprsQuery = useEventServiceGetEventOpRs({ eventKey: event.key });
   const rankingsQuery = useEventServiceGetEventRankings({
     eventKey: event.key,
   });
   const awardsQuery = useEventServiceGetEventAwards({ eventKey: event.key });
-  const alliancesQuery = useEventServiceGetEventAlliances({
-    eventKey: event.key,
-  });
+  // const alliancesQuery = useEventServiceGetEventAlliances({
+  //   eventKey: event.key,
+  // });
 
   return (
     <>
@@ -106,7 +108,7 @@ export default function Event() {
         <TabsContent value="results">
           <div className="flex justify-between flex-wrap gap-10">
             <div className="grow">
-              <MaybeComponent
+              {/* <MaybeComponent
                 query={matchesQuery}
                 renderSkeleton={() => <div>Loading...</div>}
                 renderComponent={(data) => (
@@ -115,10 +117,14 @@ export default function Event() {
                     title="Qualification Results"
                   />
                 )}
+              /> */}
+              <MatchTable
+                matches={matches.filter((m) => m.comp_level === "qm")}
+                title="Qualification Results"
               />
             </div>
             <div className="grow">
-              <MaybeComponent
+              {/* <MaybeComponent
                 query={alliancesQuery}
                 renderSkeleton={() => <div>Loading...</div>}
                 renderComponent={(data) => (
@@ -134,6 +140,12 @@ export default function Event() {
                     title="Playoff Results"
                   />
                 )}
+              /> */}
+
+              <AllianceSelectionTable alliances={alliances} />
+              <MatchTable
+                matches={matches.filter((m) => m.comp_level !== "qm")}
+                title="Playoff Results"
               />
             </div>
           </div>
