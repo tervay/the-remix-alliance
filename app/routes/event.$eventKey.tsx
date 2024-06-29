@@ -95,7 +95,7 @@ export default function Event() {
       </div>
 
       <Tabs defaultValue="results" className="">
-        <TabsList>
+        <TabsList className="flex items-center justify-center flex-wrap h-auto space-y-1">
           <TabsTrigger value="results">Results</TabsTrigger>
           <TabsTrigger value="rankings">Rankings</TabsTrigger>
           <TabsTrigger value="awards">Awards</TabsTrigger>

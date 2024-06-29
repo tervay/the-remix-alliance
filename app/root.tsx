@@ -8,6 +8,7 @@ import {
 import "./tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OpenAPI } from "~/api/requests";
+import Footer from "~/components/tba/footer";
 
 const queryClient = new QueryClient();
 OpenAPI.BASE = "https://www.thebluealliance.com/api/v3";
@@ -30,11 +31,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        <div className="container mx-auto">{children}</div>
+      <body className="flex flex-col min-h-screen-minus-footer">
+        <div className="container mx-auto px-4">{children}</div>
         <ScrollRestoration />
         <Scripts />
       </body>
+      <Footer />
     </html>
   );
 }

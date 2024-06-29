@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Event_Ranking } from "~/api/requests";
 import { DataTable } from "~/components/tba/dataTable";
@@ -9,7 +10,14 @@ export default function RankingsTable({
 }: { rankings: Event_Ranking }) {
   const standardCols: RankingColumnType = [
     { header: "Rank", accessorKey: "rank" },
-    { header: "Team", accessorFn: (row) => row.team_key.substring(3) },
+    {
+      header: "Team",
+      cell: ({ row }) => (
+        <Link to={`/team/${row.original.team_key.substring(3)}`}>
+          {row.original.team_key.substring(3)}
+        </Link>
+      ),
+    },
   ];
 
   const sortOrderCols: RankingColumnType = rankings.sort_order_info.map(
