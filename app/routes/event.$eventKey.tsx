@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -10,13 +9,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { parseDateString } from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
-import { UseQueryResult } from "@tanstack/react-query";
+import { Link, json, useLoaderData } from "@remix-run/react";
 import { promiseHash } from "remix-utils/promise";
 import {
-  useEventServiceGetEventAlliances,
+  useEventServiceGetEvent,
   useEventServiceGetEventAwards,
-  useEventServiceGetEventMatches,
   useEventServiceGetEventOpRs,
   useEventServiceGetEventRankings,
 } from "~/api/queries";
@@ -24,19 +21,22 @@ import {
   type Award,
   EventService,
   type Event_Ranking,
-  GetEventMatchesResponse,
-  type Match,
   type Team,
 } from "~/api/requests";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
+import InlineIcon from "~/components/tba/inlineIcon";
 import MatchTable from "~/components/tba/matchTable";
-
-import MaybeComponent, {
-  useMaybeComponent,
-} from "~/components/tba/maybeComponent";
+import MaybeComponent from "~/components/tba/maybeComponent";
 import RankingsTable from "~/components/tba/rankingsTable";
+import RelatedEventsDropdown from "~/components/tba/relatedEventsDropdown";
 import TeamPreviewDialog from "~/components/tba/teamPreviewDialog";
 import { Badge } from "~/components/ui/badge";
+import BiArrowRightCircleFill from "~icons/bi/arrow-right-circle-fill";
+import BiCalendar from "~icons/bi/calendar";
+import BiGraphUp from "~icons/bi/graph-up";
+import BiInfoCircleFill from "~icons/bi/info-circle-fill";
+import BiLink from "~icons/bi/link";
+import BiPinMapFill from "~icons/bi/pin-map-fill";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.eventKey === undefined) {
@@ -64,20 +64,114 @@ export default function Event() {
     eventKey: event.key,
   });
   const awardsQuery = useEventServiceGetEventAwards({ eventKey: event.key });
+  const parentEventQuery = event.parent_event_key
+    ? useEventServiceGetEvent({ eventKey: event.parent_event_key })
+    : null;
   // const alliancesQuery = useEventServiceGetEventAlliances({
   //   eventKey: event.key,
   // });
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-2.5">
         <h1 className="text-4xl mb-2.5 mt-5">
           {event.name} {event.year}
         </h1>
-        {event.district && (
-          <div>{event.district.display_name} District Event</div>
+        {parentEventQuery && (
+          <MaybeComponent
+            query={parentEventQuery}
+            renderComponent={(data) => (
+              <>
+                <RelatedEventsDropdown
+                  choices={
+                    data.division_keys?.map((key) => ({
+                      displayName: key,
+                      href: `/event/${key}`,
+                    })) ?? []
+                  }
+                />
+
+                <InlineIcon>
+                  <BiArrowRightCircleFill />
+                  Winners advance to{" "}
+                  <Link to={`/event/${data.key}`}>{data.short_name}</Link>
+                </InlineIcon>
+              </>
+            )}
+            renderSkeleton={() => (
+              <>
+                <RelatedEventsDropdown choices={[]} />
+                <InlineIcon>
+                  <BiArrowRightCircleFill />
+                  Winners advance to...
+                </InlineIcon>
+              </>
+            )}
+          />
         )}
-        <div>
+
+        <InlineIcon>
+          <BiCalendar />
+          {startDate.toLocaleDateString("default", {
+            month: "long",
+            day: "numeric",
+          })}{" "}
+          to{" "}
+          {endDate.toLocaleDateString("default", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+          {event.week && (
+            <Badge className="h-[1.5em] align-text-top mx-2">
+              Week {event.week + 1}
+            </Badge>
+          )}
+        </InlineIcon>
+
+        <InlineIcon>
+          <BiPinMapFill />
+
+          {event.gmaps_url ? (
+            <Link to={event.gmaps_url}>
+              {event.city}, {event.state_prov}, {event.country}
+            </Link>
+          ) : (
+            <>
+              {event.city}, {event.state_prov}, {event.country}
+            </>
+          )}
+        </InlineIcon>
+        {event.website && (
+          <InlineIcon>
+            <BiLink />
+            <Link to={event.website}>{event.website}</Link>
+          </InlineIcon>
+        )}
+
+        {event.first_event_code && (
+          <InlineIcon>
+            <BiInfoCircleFill />
+            Details on{" "}
+            <Link
+              to={`https://frc-events.firstinspires.org/${event.year}/${event.first_event_code}`}
+            >
+              FRC Events
+            </Link>
+          </InlineIcon>
+        )}
+
+        <InlineIcon>
+          <BiGraphUp />
+          <Link to={`https://www.statbotics.io/event/${event.key}`}>
+            Statbotics
+          </Link>
+        </InlineIcon>
+
+        {/* {event.district && (
+          <div>{event.district.display_name} District Event</div>
+        )} */}
+        {/* <div>
           {startDate.toLocaleDateString("default", {
             month: "long",
             day: "numeric",
@@ -93,7 +187,7 @@ export default function Event() {
           <div>
             <Badge>Week {event.week + 1}</Badge>
           </div>
-        )}
+        )} */}
       </div>
 
       <Tabs defaultValue="results" className="">
