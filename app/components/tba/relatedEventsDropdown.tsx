@@ -31,7 +31,9 @@ export default function RelatedEventsDropdown({
       <DropdownMenuContent>
         {choices.map((choice) => (
           <DropdownMenuItem key={choice.displayName} asChild>
-            <Link to={choice.href}>{choice.displayName}</Link>
+            <Link to={choice.href} prefetch="render">
+              {choice.displayName}
+            </Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

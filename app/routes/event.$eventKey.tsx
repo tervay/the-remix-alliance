@@ -14,6 +14,7 @@ import { promiseHash } from "remix-utils/promise";
 import {
   useEventServiceGetEvent,
   useEventServiceGetEventAwards,
+  useEventServiceGetEventCopRs,
   useEventServiceGetEventOpRs,
   useEventServiceGetEventRankings,
 } from "~/api/queries";
@@ -24,6 +25,8 @@ import {
   type Team,
 } from "~/api/requests";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
+import CoprTableView from "~/components/tba/coprTable";
+import CoprTable from "~/components/tba/coprTable";
 import InlineIcon from "~/components/tba/inlineIcon";
 import MatchTable from "~/components/tba/matchTable";
 import MaybeComponent from "~/components/tba/maybeComponent";
@@ -59,7 +62,7 @@ export default function Event() {
   const endDate = parseDateString(event.end_date);
 
   // const matchesQuery = useEventServiceGetEventMatches({ eventKey: event.key });
-  const oprsQuery = useEventServiceGetEventOpRs({ eventKey: event.key });
+  const oprsQuery = useEventServiceGetEventCopRs({ eventKey: event.key });
   const rankingsQuery = useEventServiceGetEventRankings({
     eventKey: event.key,
   });
@@ -262,9 +265,7 @@ export default function Event() {
           <MaybeComponent
             query={oprsQuery}
             renderSkeleton={() => <div>Loading...</div>}
-            renderComponent={(data) => (
-              <pre>{JSON.stringify(data, null, 2)}</pre>
-            )}
+            renderComponent={(data) => <CoprTableView eventOprs={data} />}
           />
         </TabsContent>
         <TabsContent value="media">

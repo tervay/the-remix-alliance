@@ -17,6 +17,7 @@ export default function RankingsTable({
           {row.original.team_key.substring(3)}
         </Link>
       ),
+      accessorFn: (row) => Number(row.team_key.substring(3)),
     },
   ];
 

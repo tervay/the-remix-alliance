@@ -1,4 +1,5 @@
 import type { Params } from "@remix-run/react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Match } from "~/app/api";
@@ -58,4 +59,9 @@ export function parseParamsForYearElseDefault(
   }
 
   return year;
+}
+
+export interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
