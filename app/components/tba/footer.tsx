@@ -36,7 +36,7 @@ export default function Footer() {
             <div>
               Thanks to our platinum sponsor{" "}
               <Link to={"https://www.andymark.com/"} title="AndyMark">
-                <img src={andymarkImg} alt="AndyMark" className="w-24 inline" />
+                <img src={andymarkImg} alt="AndyMark" className="h-5 inline" />
               </Link>
               .
             </div>

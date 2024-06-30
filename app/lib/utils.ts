@@ -1,7 +1,7 @@
 import type { Params } from "@remix-run/react";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { Match } from "~/api";
+import type { Match } from "~/app/api";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
