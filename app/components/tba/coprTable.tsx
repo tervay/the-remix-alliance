@@ -1,14 +1,4 @@
 import {
-  type ColumnDef,
-  type SortingState,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-  ColumnOrderState,
-} from "@tanstack/react-table";
-
-import {
   Table,
   TableBody,
   TableCell,
@@ -16,12 +6,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { Link } from "@remix-run/react";
+import {
+  type ColumnDef,
+  type ColumnOrderState,
+  type SortingState,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { useState } from "react";
 import type { Event_COPRs } from "~/api/requests";
-import type { DataTableProps } from "~/lib/utils";
-import { Link } from "@remix-run/react";
 import { Switch } from "~/components/ui/switch";
-import { Label } from "@radix-ui/react-dropdown-menu";
+import type { DataTableProps } from "~/lib/utils";
 
 export default function CoprTableView({
   eventOprs,

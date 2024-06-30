@@ -265,7 +265,9 @@ export default function Event() {
           <MaybeComponent
             query={oprsQuery}
             renderSkeleton={() => <div>Loading...</div>}
-            renderComponent={(data) => <CoprTableView eventOprs={data} />}
+            renderComponent={(data) => (
+              <CoprTableView eventOprs={data} eventYear={event.year} />
+            )}
           />
         </TabsContent>
         <TabsContent value="media">

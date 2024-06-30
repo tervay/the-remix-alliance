@@ -1,15 +1,5 @@
 import { Link } from "@remix-run/react";
-import { Fragment } from "react/jsx-runtime";
-import type { Match, Team } from "~/api/requests";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import type { Match } from "~/api/requests";
 import { cn, sortMatchComparator } from "~/lib/utils";
 
 function matchTitle(match: Match): string {
