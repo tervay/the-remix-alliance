@@ -99,7 +99,7 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
               // use these on desktop:
               "lg:grid-rows-1",
               "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(8,minmax(0,1fr))]",
-              "lg:border-[#ddd] lg:border-[1px]",
+              "lg:border-[#ddd] lg:border-b-[1px]",
               "[&>*]:lg:border-0",
             )}
           >
