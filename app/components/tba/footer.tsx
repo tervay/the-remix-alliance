@@ -19,7 +19,7 @@ function FooterLink({
 export default function Footer() {
   return (
     <footer className="mt-auto flex justify-center px-4 text-gray-800 bg-white dark:text-white dark:bg-gray-900">
-      <div className="container px-6 py-6">
+      <div className="container px-4 py-4">
         <div className="flex flex-col items-center justify-between md:flex-row">
           <Link to="/" className="flex">
             <img
@@ -51,8 +51,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-evenly mt-4 md:m-0">
-            {/* <div className="-mx-4"> */}
+          <div className="grid grid-cols-4">
             <FooterLink href="/about">About</FooterLink>
             <FooterLink href="https://github.com/the-blue-alliance/the-blue-alliance/">
               Open Source
@@ -63,7 +62,6 @@ export default function Footer() {
             <FooterLink href="/thanks">Thanks</FooterLink>
             <FooterLink href="/apidocs">API</FooterLink>
             <FooterLink href="/privacy">Privacy</FooterLink>
-            {/* </div> */}
           </div>
         </div>
       </div>

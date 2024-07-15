@@ -17,9 +17,11 @@ const config = {
     },
     container: {
       center: true,
-      padding: "2rem",
+      padding: "15px",
       screens: {
-        "2xl": "1400px",
+        sm: "768px",
+        md: "992px",
+        lg: "1200px",
       },
     },
     extend: {

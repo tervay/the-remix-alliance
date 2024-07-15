@@ -1,6 +1,42 @@
 import { Link } from "@remix-run/react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { zip } from "lodash-es";
+import type React from "react";
 import type { Match } from "~/api/requests";
+import PlayCircle from "~icons/bi/play-circle";
 import { cn, sortMatchComparator } from "~/lib/utils";
+
+const cellVariants = cva(
+  "justify-self-stretch justify-center text-center p-1.5",
+  {
+    variants: {
+      result: {
+        winner: "font-semibold",
+        loser: "",
+      },
+      allianceColor: {
+        red: "bg-red-100",
+        blue: "bg-blue-100",
+      },
+    },
+    defaultVariants: {
+      result: "loser",
+      allianceColor: undefined,
+    },
+  },
+);
+
+interface CellProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cellVariants> {}
+function GridCell({ className, result, allianceColor, ...props }: CellProps) {
+  return (
+    <div
+      className={cn(cellVariants({ result, allianceColor }), className)}
+      {...props}
+    />
+  );
+}
 
 function matchTitle(match: Match): string {
   if (match.comp_level === "f") {
@@ -22,153 +58,81 @@ function maybeGetFirstTeamVideoURL(match: Match): string | undefined {
   return `https://www.youtube.com/watch?v=${match.videos[0].key}`;
 }
 
-function TeamCell({
-  teamKey,
-  color,
-  winner,
-  gridCellArea,
-}: { teamKey?: string; color: string; winner: boolean; gridCellArea: string }) {
-  if (teamKey === undefined) {
-    return <></>;
-  }
-
-  const teamNum = teamKey.substring(3);
-  return (
-    <div
-      className={cn(
-        {
-          "bg-red-100": color === "red",
-          "bg-blue-100": color === "blue",
-          "font-semibold": winner,
-        },
-        "justify-self-stretch text-center p-1",
-        "border border-solid border-gray-200",
-      )}
-      style={{ gridArea: gridCellArea }}
-    >
-      <Link to={`/team/${teamNum}`}>{teamNum}</Link>
-    </div>
-  );
-}
-
-function ScoreCell({
-  match,
-  color,
-  winner,
-  gridCellArea,
-}: { match: Match; color: string; winner: boolean; gridCellArea: string }) {
-  return (
-    <div
-      className={cn(
-        {
-          "bg-red-100": color === "red",
-          "bg-blue-100": color === "blue",
-          "font-semibold": winner,
-        },
-        "justify-self-stretch justify-center text-center p-1",
-        "border border-solid border-gray-200",
-      )}
-      style={{ gridArea: gridCellArea }}
-    >
-      {color === "red"
-        ? match.alliances?.red?.score
-        : match.alliances?.blue?.score}
-    </div>
-  );
-}
-
+// tailwindgen.com is recommended if you're editing the grid classes
 export default function MatchTable(props: { matches: Match[]; title: string }) {
   props.matches.sort(sortMatchComparator);
 
   return (
-    <div className="">
+    <div>
       <div className="font-semibold text-2xl mb-2.5 mt-5">{props.title}</div>
 
-      <div className="border border-solid border-gray-200">
+      <div>
         {props.matches.map((m) => (
           <div
-            className={cn(
-              "grid grid-flow-col items-center justify-items-center",
-              "[&:not(:first-child)]:border-t border-black border-collapse border-spacing-0",
-              "grid-cols-[1rem_1.5fr_1fr_1fr_1fr_1fr]",
-              "md:grid-cols-[1rem_1.5fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]",
-              "[grid-template-areas:'play_title_r1_r2_r3_rs''play_title_b1_b2_b3_bs']",
-              "md:[grid-template-areas:'play_title_r1_r2_r3_b1_b2_b3_rs_bs']",
-            )}
             key={m.key}
+            className={cn(
+              // always use these classes:
+              "grid items-center justify-items-center",
+              // use these classes on mobile:
+              "grid-rows-2",
+              "grid-cols-[1.25em_8em_1fr_1fr_1fr_1fr]", // 6 columns of these sizes
+              // use these on desktop:
+              "lg:grid-rows-1",
+              "lg:grid-cols-[1.25em_8em_repeat(8,minmax(0,1fr))]",
+            )}
           >
-            <div
-              className={cn(
-                "row-span-2 lg:row-span-1",
-                "justify-self-stretch self-stretch text-center justify-center flex items-center",
-                "border-x border-solid border-gray-200",
-                "md:[grid-area:play]",
-              )}
-            >
-              {maybeGetFirstTeamVideoURL(m) && (
-                <Link target="_blank" to={maybeGetFirstTeamVideoURL(m) ?? "#"}>
-                  {">"}
+            {/* play button and match title */}
+            <GridCell className="row-span-2 p-0">
+              {m.videos !== undefined && m.videos.length > 0 && (
+                <Link to={maybeGetFirstTeamVideoURL(m) ?? "#"}>
+                  <PlayCircle className="inline" />
                 </Link>
               )}
-            </div>
-            <div
-              className={cn(
-                "row-span-2 lg:row-span-1",
-                "justify-self-stretch self-stretch text-center justify-center flex items-center",
-                "border-x border-solid border-gray-200",
-                "md:[grid-area:title]",
-              )}
+            </GridCell>
+            <GridCell className="row-span-2">{matchTitle(m)}</GridCell>
+
+            {/* red alliance */}
+            {m.alliances?.red?.team_keys.map((k) => (
+              <GridCell
+                key={k}
+                allianceColor={"red"}
+                result={m.winning_alliance === "red" ? "winner" : "loser"}
+              >
+                {k.substring(3)}
+              </GridCell>
+            ))}
+
+            {/* blue alliance */}
+            {zip(m.alliances?.blue?.team_keys, [
+              "col-start-3 row-start-2 lg:col-start-6 lg:row-start-1",
+              "col-start-4 row-start-2 lg:col-start-7 lg:row-start-1",
+              "col-start-5 row-start-2 lg:col-start-8 lg:row-start-1",
+            ]).map(([k, x]) => (
+              <GridCell
+                key={k}
+                allianceColor={"blue"}
+                result={m.winning_alliance === "blue" ? "winner" : "loser"}
+                className={x}
+              >
+                {k?.substring(3)}
+              </GridCell>
+            ))}
+
+            {/* scores */}
+            <GridCell
+              className="col-start-6 row-start-1 lg:col-start-9"
+              allianceColor={"red"}
+              result={m.winning_alliance === "red" ? "winner" : "loser"}
             >
-              {matchTitle(m)}
-            </div>
-            <TeamCell
-              teamKey={m.alliances?.red?.team_keys[0]}
-              color="red"
-              winner={m.winning_alliance === "red"}
-              gridCellArea="r1"
-            />
-            <TeamCell
-              teamKey={m.alliances?.blue?.team_keys[0]}
-              color="blue"
-              winner={m.winning_alliance === "blue"}
-              gridCellArea="b1"
-            />
-            <TeamCell
-              teamKey={m.alliances?.red?.team_keys[1]}
-              color="red"
-              winner={m.winning_alliance === "red"}
-              gridCellArea="r2"
-            />
-            <TeamCell
-              teamKey={m.alliances?.blue?.team_keys[1]}
-              color="blue"
-              winner={m.winning_alliance === "blue"}
-              gridCellArea="b2"
-            />
-            <TeamCell
-              teamKey={m.alliances?.red?.team_keys[2]}
-              color="red"
-              winner={m.winning_alliance === "red"}
-              gridCellArea="r3"
-            />
-            <TeamCell
-              teamKey={m.alliances?.blue?.team_keys[2]}
-              color="blue"
-              winner={m.winning_alliance === "blue"}
-              gridCellArea="b3"
-            />
-            <ScoreCell
-              match={m}
-              color="red"
-              winner={m.winning_alliance === "red"}
-              gridCellArea="rs"
-            />
-            <ScoreCell
-              match={m}
-              color="blue"
-              winner={m.winning_alliance === "blue"}
-              gridCellArea="bs"
-            />
+              {m.alliances?.red?.score}
+            </GridCell>
+            <GridCell
+              className="col-start-6 lg:col-start-10"
+              allianceColor={"blue"}
+              result={m.winning_alliance === "blue" ? "winner" : "loser"}
+            >
+              {m.alliances?.blue?.score}
+            </GridCell>
           </div>
         ))}
       </div>

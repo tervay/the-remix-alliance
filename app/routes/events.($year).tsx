@@ -20,6 +20,13 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -123,7 +130,7 @@ export default function Events() {
               <DropdownMenuTrigger asChild>
                 <Button variant={"outline"}>{year}</Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent align="start">
                 {getAllYears()
                   .reverse()
                   .map((y) => (

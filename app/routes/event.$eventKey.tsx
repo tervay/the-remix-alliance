@@ -225,8 +225,8 @@ export default function Event() {
           <TabsTrigger value="media">Media</TabsTrigger>
         </TabsList>
         <TabsContent value="results">
-          <div className="flex justify-between flex-wrap gap-10">
-            <div className="grow">
+          <div className="flex gap-4 flex-wrap lg:flex-nowrap">
+            <div className="basis-full lg:basis-1/2">
               {/* <MaybeComponent
                 query={matchesQuery}
                 renderSkeleton={() => <div>Loading...</div>}
@@ -242,7 +242,7 @@ export default function Event() {
                 title="Qualification Results"
               />
             </div>
-            <div className="grow">
+            <div className="basis-full lg:basis-1/2">
               {/* <MaybeComponent
                 query={alliancesQuery}
                 renderSkeleton={() => <div>Loading...</div>}
