@@ -72,7 +72,7 @@ function WeeklyEventTable({ events, week }: { events: Event[]; week: string }) {
               <TableRow key={event.key} className="even:bg-gray-100">
                 <TableCell>
                   <div className="flex flex-col">
-                    <Link to={`/event/${event.key}`} prefetch="viewport">
+                    <Link to={`/event/${event.key}`} prefetch="intent">
                       {event.name}
                     </Link>
                     <div>

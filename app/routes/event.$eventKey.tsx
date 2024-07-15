@@ -9,7 +9,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { parseDateString } from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, json, useLoaderData } from "@remix-run/react";
+import {
+  type ClientLoaderFunctionArgs,
+  Link,
+  json,
+  useLoaderData,
+} from "@remix-run/react";
 import { promiseHash } from "remix-utils/promise";
 import {
   useEventServiceGetEvent,
@@ -56,6 +61,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
     }),
   );
 }
+
+export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
+  if (params.eventKey === undefined) {
+    throw new Error("Missing eventKey");
+  }
+
+  console.log("(Client) Requesting event", params.eventKey);
+
+  return json(
+    await promiseHash({
+      event: EventService.getEvent({ eventKey: params.eventKey }),
+      matches: EventService.getEventMatches({ eventKey: params.eventKey }),
+      alliances: EventService.getEventAlliances({ eventKey: params.eventKey }),
+    }),
+  );
+}
+
 export default function Event() {
   const { event, matches, alliances } = useLoaderData<typeof loader>();
   const startDate = parseDateString(event.start_date);
