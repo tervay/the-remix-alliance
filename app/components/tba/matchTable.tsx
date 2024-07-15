@@ -1,38 +1,56 @@
 import { Link } from "@remix-run/react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import { zip } from "lodash-es";
 import type React from "react";
 import type { Match } from "~/api/requests";
-import PlayCircle from "~icons/bi/play-circle";
 import { cn, sortMatchComparator } from "~/lib/utils";
+import PlayCircle from "~icons/bi/play-circle";
 
 const cellVariants = cva(
-  "justify-self-stretch justify-center text-center p-1.5",
+  "justify-self-stretch justify-center text-center p-[5px] h-full content-center",
   {
     variants: {
-      result: {
+      matchResult: {
         winner: "font-semibold",
         loser: "",
       },
       allianceColor: {
-        red: "bg-red-100",
-        blue: "bg-blue-100",
+        red: "bg-[#fee]",
+        blue: "bg-[#eef]",
+      },
+      teamOrScore: {
+        team: "",
+        score: "",
       },
     },
     defaultVariants: {
-      result: "loser",
+      matchResult: "loser",
       allianceColor: undefined,
+      teamOrScore: "team",
     },
+    compoundVariants: [
+      { allianceColor: "red", teamOrScore: "score", class: "bg-[#fdd]" },
+      { allianceColor: "blue", teamOrScore: "score", class: "bg-[#ddf]" },
+    ],
   },
 );
 
 interface CellProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cellVariants> {}
-function GridCell({ className, result, allianceColor, ...props }: CellProps) {
+function GridCell({
+  className,
+  matchResult,
+  allianceColor,
+  teamOrScore,
+  ...props
+}: CellProps) {
   return (
     <div
-      className={cn(cellVariants({ result, allianceColor }), className)}
+      className={cn(
+        cellVariants({ matchResult, allianceColor, teamOrScore }),
+        className,
+      )}
       {...props}
     />
   );
@@ -75,14 +93,18 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
               "grid items-center justify-items-center",
               // use these classes on mobile:
               "grid-rows-2",
-              "grid-cols-[1.25em_8em_1fr_1fr_1fr_1fr]", // 6 columns of these sizes
+              "grid-cols-[calc(1.25em+10px)_8em_1fr_1fr_1fr_1fr]", // 6 columns of these sizes
+              "border-[#000] border-b-[1px]",
+              "[&>*]:border-[#ddd] [&>*]:border-[1px]",
               // use these on desktop:
               "lg:grid-rows-1",
-              "lg:grid-cols-[1.25em_8em_repeat(8,minmax(0,1fr))]",
+              "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(8,minmax(0,1fr))]",
+              "lg:border-[#ddd] lg:border-[1px]",
+              "[&>*]:lg:border-0",
             )}
           >
             {/* play button and match title */}
-            <GridCell className="row-span-2 p-0">
+            <GridCell className="row-span-2">
               {m.videos !== undefined && m.videos.length > 0 && (
                 <Link to={maybeGetFirstTeamVideoURL(m) ?? "#"}>
                   <PlayCircle className="inline" />
@@ -96,9 +118,9 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
               <GridCell
                 key={k}
                 allianceColor={"red"}
-                result={m.winning_alliance === "red" ? "winner" : "loser"}
+                matchResult={m.winning_alliance === "red" ? "winner" : "loser"}
               >
-                {k.substring(3)}
+                <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
               </GridCell>
             ))}
 
@@ -111,10 +133,10 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
               <GridCell
                 key={k}
                 allianceColor={"blue"}
-                result={m.winning_alliance === "blue" ? "winner" : "loser"}
+                matchResult={m.winning_alliance === "blue" ? "winner" : "loser"}
                 className={x}
               >
-                {k?.substring(3)}
+                <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
               </GridCell>
             ))}
 
@@ -122,14 +144,16 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
             <GridCell
               className="col-start-6 row-start-1 lg:col-start-9"
               allianceColor={"red"}
-              result={m.winning_alliance === "red" ? "winner" : "loser"}
+              matchResult={m.winning_alliance === "red" ? "winner" : "loser"}
+              teamOrScore={"score"}
             >
               {m.alliances?.red?.score}
             </GridCell>
             <GridCell
               className="col-start-6 lg:col-start-10"
               allianceColor={"blue"}
-              result={m.winning_alliance === "blue" ? "winner" : "loser"}
+              matchResult={m.winning_alliance === "blue" ? "winner" : "loser"}
+              teamOrScore={"score"}
             >
               {m.alliances?.blue?.score}
             </GridCell>
