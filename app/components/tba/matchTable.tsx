@@ -5,6 +5,7 @@ import type React from "react";
 import type { Match } from "~/api/requests";
 import { cn, sortMatchComparator } from "~/lib/utils";
 import PlayCircle from "~icons/bi/play-circle";
+import BiDot from "~icons/bi/dot";
 
 const cellVariants = cva("", {
   variants: {
@@ -20,7 +21,6 @@ const cellVariants = cva("", {
       team: "",
       score: "",
     },
-    dq: {},
   },
   defaultVariants: {
     matchResult: "loser",
@@ -43,7 +43,10 @@ const cellVariants = cva("", {
 
 interface CellProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cellVariants> {}
+    VariantProps<typeof cellVariants> {
+  dq?: boolean;
+  surrogate?: boolean;
+}
 function GridCell({
   className,
   matchResult,
@@ -56,6 +59,10 @@ function GridCell({
       className={cn(
         cellVariants({ matchResult, allianceColor, teamOrScore }),
         className,
+        {
+          "line-through": props.dq,
+          "underline decoration-dotted": props.surrogate,
+        },
       )}
       {...props}
     />
@@ -136,6 +143,8 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
                 key={k}
                 allianceColor={"red"}
                 matchResult={m.winning_alliance === "red" ? "winner" : "loser"}
+                dq={m.alliances?.red?.dq_team_keys?.includes(k)}
+                surrogate={m.alliances?.red?.surrogate_team_keys?.includes(k)}
               >
                 <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
               </GridCell>
@@ -152,6 +161,10 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
                 allianceColor={"blue"}
                 matchResult={m.winning_alliance === "blue" ? "winner" : "loser"}
                 className={x}
+                dq={m.alliances?.blue?.dq_team_keys?.includes(k ?? "")}
+                surrogate={m.alliances?.blue?.surrogate_team_keys?.includes(
+                  k ?? "",
+                )}
               >
                 <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
               </GridCell>

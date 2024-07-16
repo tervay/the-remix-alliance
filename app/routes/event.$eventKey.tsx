@@ -227,40 +227,12 @@ export default function Event() {
         <TabsContent value="results">
           <div className="flex gap-4 flex-wrap lg:flex-nowrap">
             <div className="basis-full lg:basis-1/2">
-              {/* <MaybeComponent
-                query={matchesQuery}
-                renderSkeleton={() => <div>Loading...</div>}
-                renderComponent={(data) => (
-                  <MatchTable
-                    matches={data.filter((m) => m.comp_level === "qm")}
-                    title="Qualification Results"
-                  />
-                )}
-              /> */}
               <MatchTable
                 matches={matches.filter((m) => m.comp_level === "qm")}
                 title="Qualification Results"
               />
             </div>
             <div className="basis-full lg:basis-1/2">
-              {/* <MaybeComponent
-                query={alliancesQuery}
-                renderSkeleton={() => <div>Loading...</div>}
-                renderComponent={(data) => (
-                  <AllianceSelectionTable alliances={data} />
-                )}
-              />
-              <MaybeComponent
-                query={matchesQuery}
-                renderSkeleton={() => <div>Loading...</div>}
-                renderComponent={(data) => (
-                  <MatchTable
-                    matches={data.filter((m) => m.comp_level !== "qm")}
-                    title="Playoff Results"
-                  />
-                )}
-              /> */}
-
               <AllianceSelectionTable alliances={alliances} />
               <MatchTable
                 matches={matches.filter((m) => m.comp_level !== "qm")}
