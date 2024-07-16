@@ -6,34 +6,40 @@ import type { Match } from "~/api/requests";
 import { cn, sortMatchComparator } from "~/lib/utils";
 import PlayCircle from "~icons/bi/play-circle";
 
-const cellVariants = cva(
-  "justify-self-stretch justify-center text-center p-[5px] h-full content-center",
-  {
-    variants: {
-      matchResult: {
-        winner: "font-semibold",
-        loser: "",
-      },
-      allianceColor: {
-        red: "bg-[#fee]",
-        blue: "bg-[#eef]",
-      },
-      teamOrScore: {
-        team: "",
-        score: "",
-      },
+const cellVariants = cva("", {
+  variants: {
+    matchResult: {
+      winner: "font-semibold",
+      loser: "",
     },
-    defaultVariants: {
-      matchResult: "loser",
-      allianceColor: undefined,
-      teamOrScore: "team",
+    allianceColor: {
+      red: "bg-alliance-red-light",
+      blue: "bg-alliance-blue-light",
     },
-    compoundVariants: [
-      { allianceColor: "red", teamOrScore: "score", class: "bg-[#fdd]" },
-      { allianceColor: "blue", teamOrScore: "score", class: "bg-[#ddf]" },
-    ],
+    teamOrScore: {
+      team: "",
+      score: "",
+    },
+    dq: {},
   },
-);
+  defaultVariants: {
+    matchResult: "loser",
+    allianceColor: undefined,
+    teamOrScore: "team",
+  },
+  compoundVariants: [
+    {
+      allianceColor: "red",
+      teamOrScore: "score",
+      class: "bg-alliance-red-dark",
+    },
+    {
+      allianceColor: "blue",
+      teamOrScore: "score",
+      class: "bg-alliance-blue-dark",
+    },
+  ],
+});
 
 interface CellProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -80,29 +86,40 @@ function maybeGetFirstTeamVideoURL(match: Match): string | undefined {
 export default function MatchTable(props: { matches: Match[]; title: string }) {
   props.matches.sort(sortMatchComparator);
 
+  const gridStyle = cn(
+    // always use these classes:
+    "grid items-center justify-items-center",
+    "[&>*]:justify-self-stretch [&>*]:justify-center",
+    "[&>*]:text-center [&>*]:p-[5px] [&>*]:h-full [&>*]:content-center",
+    // use these classes on mobile:
+    "grid-rows-2",
+    "grid-cols-[calc(1.25em+10px)_8em_1fr_1fr_1fr_1fr]", // 6 columns of these sizes
+    "border-[#000] border-b-[1px]",
+    "[&>*]:border-[#ddd] [&>*]:border-[1px]",
+    // use these on desktop:
+    "lg:grid-rows-1",
+    "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(6,minmax(0,1fr))_0.75fr_0.75fr]",
+    "lg:border-[#ddd] lg:border-b-[1px]",
+    "[&>*]:lg:border-0 [&>*]:lg:border-r-[1px]", // reset the border, then apply one to the right
+  );
+
   return (
     <div>
       <div className="font-semibold text-2xl mb-2.5 mt-5">{props.title}</div>
 
-      <div>
+      <div className="border-[#ddd] border-t-[1px] border-l-[1px]">
+        <div className={cn(gridStyle, "bg-[#f0f0f0] font-semibold")}>
+          <div>
+            <PlayCircle className="inline" />
+          </div>
+          <div>Match</div>
+          <div className="col-span-3">Red Alliance</div>
+          <div className="col-span-3 col-start-6">Blue Alliance</div>
+          <div className="col-span-2 col-start-9">Scores</div>
+        </div>
+
         {props.matches.map((m) => (
-          <div
-            key={m.key}
-            className={cn(
-              // always use these classes:
-              "grid items-center justify-items-center",
-              // use these classes on mobile:
-              "grid-rows-2",
-              "grid-cols-[calc(1.25em+10px)_8em_1fr_1fr_1fr_1fr]", // 6 columns of these sizes
-              "border-[#000] border-b-[1px]",
-              "[&>*]:border-[#ddd] [&>*]:border-[1px]",
-              // use these on desktop:
-              "lg:grid-rows-1",
-              "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(8,minmax(0,1fr))]",
-              "lg:border-[#ddd] lg:border-b-[1px]",
-              "[&>*]:lg:border-0",
-            )}
-          >
+          <div key={m.key} className={gridStyle}>
             {/* play button and match title */}
             <GridCell className="row-span-2">
               {m.videos !== undefined && m.videos.length > 0 && (
