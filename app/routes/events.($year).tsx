@@ -1,6 +1,5 @@
 import {
   getAllYears,
-  getCurrentDefaultYear,
   parseDateString,
   parseParamsForYearElseDefault,
 } from "@/lib/utils";
@@ -9,23 +8,14 @@ import { json, useLoaderData } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import { groupBy } from "lodash-es";
 import { promiseHash } from "remix-utils/promise";
-import { type Event, EventService } from "~/api/requests";
+import { type Event, getEventsByYear } from "~/api/tba";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import {
   Table,
   TableBody,
@@ -34,12 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  CMP_EVENT_TYPES,
-  OFFSEASON,
-  PRESEASON,
-  SEASON_EVENT_TYPES,
-} from "~/lib/api/EventType";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const year = parseParamsForYearElseDefault(params);
@@ -49,7 +33,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   return json(
     await promiseHash({
-      events: EventService.getEventsByYear({ year }),
+      events: getEventsByYear({ year }),
       year: Promise.resolve(year),
     }),
   );
@@ -118,8 +102,12 @@ export default function Events() {
   );
   const groupedWeeklyEvents = groupBy(weeklyEvents, (e) => e.week);
   const cmpEvents = events.filter((e) => CMP_EVENT_TYPES.has(e.event_type));
-  const preseasonEvents = events.filter((e) => e.event_type === PRESEASON);
-  const offseasonEvents = events.filter((e) => e.event_type === OFFSEASON);
+  const preseasonEvents = events.filter(
+    (e) => e.event_type === EventType.PRESEASON,
+  );
+  const offseasonEvents = events.filter(
+    (e) => e.event_type === EventType.OFFSEASON,
+  );
 
   return (
     <>

@@ -93,7 +93,6 @@ function CoprTable<TData, TValue>({
   data,
   defaultEnabled,
 }: DataTableProps<TData, TValue> & { defaultEnabled: string[] }) {
-  console.log(columns);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
   const [columnVisibility, setColumnVisibility] = useState(
@@ -127,10 +126,8 @@ function CoprTable<TData, TValue>({
     onColumnOrderChange: setColumnOrder,
   });
 
-  console.log(table.getState().columnVisibility);
-
   return (
-    <div className="flex flex-wrap-reverse">
+    <div className="flex">
       <div>
         {table.getAllLeafColumns().map((column) => {
           if (!column.getCanHide()) {

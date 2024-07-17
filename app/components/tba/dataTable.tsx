@@ -1,5 +1,6 @@
 import {
   type ColumnDef,
+  type Row,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -25,7 +26,10 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  conditionalRowStyling,
+}: DataTableProps<TData, TValue> & {
+  conditionalRowStyling?: (row: Row<TData>) => string;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
@@ -82,6 +86,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className={conditionalRowStyling?.(row)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="text-center">

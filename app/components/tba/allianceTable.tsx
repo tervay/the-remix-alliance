@@ -8,11 +8,55 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Link } from "@remix-run/react";
+import { type VariantProps, cva } from "class-variance-authority";
 import { max } from "lodash-es";
-import type { Elimination_Alliance } from "~/api/requests";
+import type React from "react";
+import type { EliminationAlliance } from "~/api/tba";
+import BiTrophy from "~icons/bi/trophy";
+import InlineIcon from "./inlineIcon";
+
+const rowVariants = cva("text-center", {
+  variants: {
+    variant: {
+      winner: "bg-yellow-100 shadow-inner shadow-yellow-200 font-bold",
+      finalist: "bg-gray-100 shadow-inner shadow-gray-200",
+      default: "",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+interface AllianceTableRowProps
+  extends React.HTMLAttributes<HTMLTableRowElement>,
+    VariantProps<typeof rowVariants> {}
+
+function AllianceTableRow({
+  className,
+  variant,
+  ...props
+}: AllianceTableRowProps): JSX.Element {
+  return (
+    <TableRow className={cn(rowVariants({ variant, className }))} {...props} />
+  );
+}
+
+function extractAllianceNumber(input: string): string {
+  // Regular expression to match "Alliance" followed by a space and one or more digits
+  const regex = /^Alliance (\d+)$/;
+  const match = input.match(regex);
+
+  if (match) {
+    // If there's a match, return the captured number as a string
+    return match[1];
+  }
+
+  return input;
+}
 
 export default function AllianceSelectionTable(props: {
-  alliances: Elimination_Alliance[];
+  alliances: EliminationAlliance[];
 }) {
   const allianceSize = max(props.alliances.map((a) => a.picks.length)) || 3;
 
@@ -20,7 +64,7 @@ export default function AllianceSelectionTable(props: {
     <div className="mt-5">
       <div className="text-2xl font-bold">Alliances</div>
 
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow className="*:font-bold *:h-8">
             <TableHead>Alliance</TableHead>
@@ -32,25 +76,39 @@ export default function AllianceSelectionTable(props: {
         </TableHeader>
         <TableBody>
           {props.alliances.map((a) => (
-            <TableRow
+            <AllianceTableRow
               key={a.name}
-              className={cn("text-center", {
-                "font-bold": a.status?.status === "won",
-              })}
+              variant={
+                a.status?.level === "f"
+                  ? a.status.status === "won"
+                    ? "winner"
+                    : "finalist"
+                  : "default"
+              }
             >
-              <TableCell>{a.name}</TableCell>
               <TableCell>
-                <Link to={`/team/${a.picks[0].substring(3)}`}>
-                  {a.picks[0].substring(3)}
-                </Link>
+                {a.status?.status === "won" ? (
+                  <InlineIcon>
+                    <BiTrophy />
+                    {extractAllianceNumber(a.name ?? "")}
+                  </InlineIcon>
+                ) : (
+                  <>{extractAllianceNumber(a.name ?? "")}</>
+                )}
               </TableCell>
 
-              {a.picks.slice(1).map((p) => (
-                <TableCell key={p}>
-                  <Link to={`/team/${p.substring(3)}`}>{p.substring(3)}</Link>
-                </TableCell>
-              ))}
-            </TableRow>
+              {[...Array(allianceSize).keys()].map((i) =>
+                a.picks.length > i ? (
+                  <TableCell key={a.picks[i]}>
+                    <Link to={`/team/${a.picks[i].substring(3)}`}>
+                      {a.picks[i].substring(3)}
+                    </Link>
+                  </TableCell>
+                ) : (
+                  <TableCell key={`${a.name}-${i}`}>-</TableCell>
+                ),
+              )}
+            </AllianceTableRow>
           ))}
         </TableBody>
       </Table>

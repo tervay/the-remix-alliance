@@ -5,16 +5,17 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import "./tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { OpenAPI } from "~/api/requests";
+import * as api from "~/api/tba";
 import Footer from "~/components/tba/footer";
+import "./tailwind.css";
 
 const queryClient = new QueryClient();
-OpenAPI.BASE = "https://www.thebluealliance.com/api/v3";
-OpenAPI.HEADERS = {
+api.defaults.baseUrl = "https://www.thebluealliance.com/api/v3";
+api.defaults.headers = {
   "X-TBA-Auth-Key": import.meta.env.VITE_TBA_AUTH_KEY,
 };
+api.defaults.credentials = "omit";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

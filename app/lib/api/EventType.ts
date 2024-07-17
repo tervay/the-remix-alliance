@@ -1,68 +1,73 @@
 // https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance/master/consts/event_type.py
-export const REGIONAL = 0;
-export const DISTRICT = 1;
-export const DISTRICT_CMP = 2;
-export const CMP_DIVISION = 3;
-export const CMP_FINALS = 4;
-export const DISTRICT_CMP_DIVISION = 5;
-export const FOC = 6;
-export const REMOTE = 7;
+enum EventType {
+  REGIONAL = 0,
+  DISTRICT = 1,
+  DISTRICT_CMP = 2,
+  CMP_DIVISION = 3,
+  CMP_FINALS = 4,
+  DISTRICT_CMP_DIVISION = 5,
+  FOC = 6,
+  REMOTE = 7,
 
-export const OFFSEASON = 99;
-export const PRESEASON = 100;
-export const UNLABLED = -1;
+  OFFSEASON = 99,
+  PRESEASON = 100,
+  UNLABLED = -1,
+}
 
-export const eventTypeNames: { [key: number]: string } = {
-  [REGIONAL]: "Regional",
-  [DISTRICT]: "District",
-  [DISTRICT_CMP_DIVISION]: "District Championship Division",
-  [DISTRICT_CMP]: "District Championship",
-  [CMP_DIVISION]: "Championship Division",
-  [CMP_FINALS]: "Championship Finals",
-  [FOC]: "Festival of Champions",
-  [OFFSEASON]: "Offseason",
-  [PRESEASON]: "Preseason",
-  [REMOTE]: "Remote",
-  [UNLABLED]: "--",
+const EVENT_TYPE_NAMES: { [key in EventType]: string } = {
+  [EventType.REGIONAL]: "Regional",
+  [EventType.DISTRICT]: "District",
+  [EventType.DISTRICT_CMP_DIVISION]: "District Championship Division",
+  [EventType.DISTRICT_CMP]: "District Championship",
+  [EventType.CMP_DIVISION]: "Championship Division",
+  [EventType.CMP_FINALS]: "Championship Finals",
+  [EventType.FOC]: "Festival of Champions",
+  [EventType.OFFSEASON]: "Offseason",
+  [EventType.PRESEASON]: "Preseason",
+  [EventType.REMOTE]: "Remote",
+  [EventType.UNLABLED]: "--",
 };
 
-export const shortEventTypeNames: { [key: number]: string } = {
-  [REGIONAL]: "Regional",
-  [DISTRICT]: "District",
-  [DISTRICT_CMP_DIVISION]: "District Championship Division",
-  [DISTRICT_CMP]: "District Championship",
-  [CMP_DIVISION]: "Division",
-  [CMP_FINALS]: "Championship",
-  [FOC]: "FoC",
-  [OFFSEASON]: "Offseason",
-  [PRESEASON]: "Preseason",
-  [REMOTE]: "Remote",
-  [UNLABLED]: "--",
+const EVENT_TYPE_SHORT_NAMES: { [key in EventType]: string } = {
+  [EventType.REGIONAL]: "Regional",
+  [EventType.DISTRICT]: "District",
+  [EventType.DISTRICT_CMP_DIVISION]: "District Championship Division",
+  [EventType.DISTRICT_CMP]: "District Championship",
+  [EventType.CMP_DIVISION]: "Division",
+  [EventType.CMP_FINALS]: "Championship",
+  [EventType.FOC]: "FoC",
+  [EventType.OFFSEASON]: "Offseason",
+  [EventType.PRESEASON]: "Preseason",
+  [EventType.REMOTE]: "Remote",
+  [EventType.UNLABLED]: "--",
 };
 
-export const DISTRICT_EVENT_TYPES = new Set([
-  DISTRICT,
-  DISTRICT_CMP_DIVISION,
-  DISTRICT_CMP,
+const DISTRICT_EVENT_TYPES: Set<EventType> = new Set([
+  EventType.DISTRICT,
+  EventType.DISTRICT_CMP_DIVISION,
+  EventType.DISTRICT_CMP,
 ]);
 
-export const NON_CMP_EVENT_TYPES = new Set([
-  REGIONAL,
-  DISTRICT,
-  DISTRICT_CMP_DIVISION,
-  DISTRICT_CMP,
-  REMOTE,
+const NON_CMP_EVENT_TYPES: Set<EventType> = new Set([
+  EventType.REGIONAL,
+  EventType.DISTRICT,
+  EventType.DISTRICT_CMP_DIVISION,
+  EventType.DISTRICT_CMP,
+  EventType.REMOTE,
 ]);
 
-export const CMP_EVENT_TYPES = new Set([CMP_DIVISION, CMP_FINALS]);
+const CMP_EVENT_TYPES: Set<EventType> = new Set([
+  EventType.CMP_DIVISION,
+  EventType.CMP_FINALS,
+]);
 
-export const SEASON_EVENT_TYPES = new Set([
-  REGIONAL,
-  DISTRICT,
-  DISTRICT_CMP_DIVISION,
-  DISTRICT_CMP,
-  CMP_DIVISION,
-  CMP_FINALS,
-  FOC,
-  REMOTE,
+const SEASON_EVENT_TYPES: Set<EventType> = new Set([
+  EventType.REGIONAL,
+  EventType.DISTRICT,
+  EventType.DISTRICT_CMP_DIVISION,
+  EventType.DISTRICT_CMP,
+  EventType.CMP_DIVISION,
+  EventType.CMP_FINALS,
+  EventType.FOC,
+  EventType.REMOTE,
 ]);

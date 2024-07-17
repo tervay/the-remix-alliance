@@ -10,41 +10,60 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { parseDateString } from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
+  Await,
   type ClientLoaderFunctionArgs,
   Link,
-  json,
+  defer,
   useLoaderData,
 } from "@remix-run/react";
+import { Suspense } from "react";
 import { promiseHash } from "remix-utils/promise";
 import {
-  useEventServiceGetEvent,
-  useEventServiceGetEventAwards,
-  useEventServiceGetEventCopRs,
-  useEventServiceGetEventOpRs,
-  useEventServiceGetEventRankings,
-} from "~/api/queries";
-import {
   type Award,
-  EventService,
-  type Event_Ranking,
+  type EventRanking,
   type Team,
-} from "~/api/requests";
+  getEvent,
+  getEventAlliances,
+  getEventCopRs,
+  getEventMatches,
+  getEventRankings,
+} from "~/api/tba";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
+import CoprBarChart from "~/components/tba/coprBarChart";
+import CoprScatterChart from "~/components/tba/coprScatterChart";
 import CoprTableView from "~/components/tba/coprTable";
-import CoprTable from "~/components/tba/coprTable";
 import InlineIcon from "~/components/tba/inlineIcon";
 import MatchTable from "~/components/tba/matchTable";
-import MaybeComponent from "~/components/tba/maybeComponent";
 import RankingsTable from "~/components/tba/rankingsTable";
 import RelatedEventsDropdown from "~/components/tba/relatedEventsDropdown";
 import TeamPreviewDialog from "~/components/tba/teamPreviewDialog";
 import { Badge } from "~/components/ui/badge";
-import BiArrowRightCircleFill from "~icons/bi/arrow-right-circle-fill";
 import BiCalendar from "~icons/bi/calendar";
 import BiGraphUp from "~icons/bi/graph-up";
 import BiInfoCircleFill from "~icons/bi/info-circle-fill";
 import BiLink from "~icons/bi/link";
+import BiListOl from "~icons/bi/list-ol";
 import BiPinMapFill from "~icons/bi/pin-map-fill";
+import BiTrophy from "~icons/bi/trophy";
+import MdiFolderMediaOutline from "~icons/mdi/folder-media-outline";
+import MdiGraphBoxOutline from "~icons/mdi/graph-box-outline";
+import MdiRobot from "~icons/mdi/robot";
+import MdiTournament from "~icons/mdi/tournament";
+
+function requiredData(eventKey: string) {
+  return {
+    event: getEvent({ eventKey }),
+    matches: getEventMatches({ eventKey }),
+    alliances: getEventAlliances({ eventKey }),
+  };
+}
+
+function delayedData(eventKey: string) {
+  return {
+    oprs: getEventCopRs({ eventKey }),
+    rankings: getEventRankings({ eventKey }),
+  };
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.eventKey === undefined) {
@@ -52,49 +71,47 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   console.log("Requesting event", params.eventKey);
+  const delayed = delayedData(params.eventKey);
+  const required = await promiseHash(requiredData(params.eventKey));
+  const parentEvent =
+    required.event.parent_event_key !== undefined &&
+    required.event.parent_event_key !== null
+      ? getEvent({ eventKey: required.event.parent_event_key })
+      : undefined;
 
-  return json(
-    await promiseHash({
-      event: EventService.getEvent({ eventKey: params.eventKey }),
-      matches: EventService.getEventMatches({ eventKey: params.eventKey }),
-      alliances: EventService.getEventAlliances({ eventKey: params.eventKey }),
-    }),
-  );
+  return defer({ ...delayed, ...required, parentEvent });
 }
 
-export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  request,
+  serverLoader,
+}: ClientLoaderFunctionArgs) {
   if (params.eventKey === undefined) {
     throw new Error("Missing eventKey");
   }
 
-  console.log("(Client) Requesting event", params.eventKey);
+  const delayed = delayedData(params.eventKey);
+  const required = await promiseHash(requiredData(params.eventKey));
 
-  return json(
-    await promiseHash({
-      event: EventService.getEvent({ eventKey: params.eventKey }),
-      matches: EventService.getEventMatches({ eventKey: params.eventKey }),
-      alliances: EventService.getEventAlliances({ eventKey: params.eventKey }),
-    }),
-  );
+  const parentEvent =
+    required.event.parent_event_key !== undefined &&
+    required.event.parent_event_key !== null
+      ? getEvent({ eventKey: required.event.parent_event_key })
+      : Promise.resolve(undefined);
+
+  return { ...delayed, ...required, parentEvent };
 }
 
-export default function Event() {
-  const { event, matches, alliances } = useLoaderData<typeof loader>();
+export function HydrateFallback() {
+  return <p>Skeleton rendered during SSR</p>; // (2)
+}
+
+export default function EventPage() {
+  const { event, matches, alliances, parentEvent, rankings, oprs } =
+    useLoaderData<typeof loader>();
   const startDate = parseDateString(event.start_date);
   const endDate = parseDateString(event.end_date);
-
-  // const matchesQuery = useEventServiceGetEventMatches({ eventKey: event.key });
-  const oprsQuery = useEventServiceGetEventCopRs({ eventKey: event.key });
-  const rankingsQuery = useEventServiceGetEventRankings({
-    eventKey: event.key,
-  });
-  const awardsQuery = useEventServiceGetEventAwards({ eventKey: event.key });
-  const parentEventQuery = event.parent_event_key
-    ? useEventServiceGetEvent({ eventKey: event.parent_event_key })
-    : null;
-  // const alliancesQuery = useEventServiceGetEventAlliances({
-  //   eventKey: event.key,
-  // });
 
   return (
     <>
@@ -102,38 +119,23 @@ export default function Event() {
         <h1 className="text-4xl mb-2.5 mt-5">
           {event.name} {event.year}
         </h1>
-        {parentEventQuery && (
-          <MaybeComponent
-            query={parentEventQuery}
-            renderComponent={(data) => (
-              <>
-                <RelatedEventsDropdown
-                  choices={
-                    data.division_keys?.map((key) => ({
-                      displayName: key,
-                      href: `/event/${key}`,
-                    })) ?? []
-                  }
-                />
 
-                <InlineIcon>
-                  <BiArrowRightCircleFill />
-                  Winners advance to{" "}
-                  <Link to={`/event/${data.key}`}>{data.short_name}</Link>
-                </InlineIcon>
-              </>
-            )}
-            renderSkeleton={() => (
-              <>
-                <RelatedEventsDropdown choices={[]} />
-                <InlineIcon>
-                  <BiArrowRightCircleFill />
-                  Winners advance to...
-                </InlineIcon>
-              </>
-            )}
-          />
-        )}
+        <Suspense fallback={<RelatedEventsDropdown choices={[]} />}>
+          <Await resolve={parentEvent}>
+            {(e) =>
+              e === undefined ? (
+                <></>
+              ) : (
+                <RelatedEventsDropdown
+                  choices={(e.division_keys ?? []).map((key) => ({
+                    displayName: key,
+                    href: `/event/${key}`,
+                  }))}
+                />
+              )
+            }
+          </Await>
+        </Suspense>
 
         <InlineIcon>
           <BiCalendar />
@@ -216,13 +218,43 @@ export default function Event() {
       </div>
 
       <Tabs defaultValue="results" className="">
-        <TabsList className="flex items-center justify-center flex-wrap h-auto space-y-1">
-          <TabsTrigger value="results">Results</TabsTrigger>
-          <TabsTrigger value="rankings">Rankings</TabsTrigger>
-          <TabsTrigger value="awards">Awards</TabsTrigger>
-          <TabsTrigger value="teams">Teams</TabsTrigger>
-          <TabsTrigger value="insights">Insights</TabsTrigger>
-          <TabsTrigger value="media">Media</TabsTrigger>
+        <TabsList className="flex items-center justify-evenly flex-wrap h-auto [&>*]:basis-1/2 lg:[&>*]:basis-1">
+          <TabsTrigger value="results">
+            <InlineIcon>
+              <MdiTournament />
+              Results
+            </InlineIcon>
+          </TabsTrigger>
+          <TabsTrigger value="rankings">
+            <InlineIcon>
+              <BiListOl />
+              Rankings
+            </InlineIcon>
+          </TabsTrigger>
+          <TabsTrigger value="awards">
+            <InlineIcon>
+              <BiTrophy />
+              Awards
+            </InlineIcon>
+          </TabsTrigger>
+          <TabsTrigger value="teams">
+            <InlineIcon>
+              <MdiRobot />
+              Teams
+            </InlineIcon>
+          </TabsTrigger>
+          <TabsTrigger value="insights">
+            <InlineIcon>
+              <MdiGraphBoxOutline />
+              Insights
+            </InlineIcon>
+          </TabsTrigger>
+          <TabsTrigger value="media">
+            <InlineIcon>
+              <MdiFolderMediaOutline />
+              Media
+            </InlineIcon>
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="results">
           <div className="flex gap-4 flex-wrap lg:flex-nowrap">
@@ -234,6 +266,7 @@ export default function Event() {
             </div>
             <div className="basis-full lg:basis-1/2">
               <AllianceSelectionTable alliances={alliances} />
+              {/* <AllianceSelectionGrid alliances={alliances} /> */}
               <MatchTable
                 matches={matches.filter((m) => m.comp_level !== "qm")}
                 title="Playoff Results"
@@ -243,11 +276,26 @@ export default function Event() {
         </TabsContent>
         <TabsContent value="rankings">
           {/* <RankingsTab rankings={rankings} /> */}
-          <MaybeComponent
+          {/* <MaybeComponent
             query={rankingsQuery}
             renderComponent={(data) => <RankingsTable rankings={data} />}
             renderSkeleton={() => <div>Loading...</div>}
-          />
+          /> */}
+
+          <Suspense>
+            <Await resolve={rankings}>
+              {(r) => (
+                <RankingsTable
+                  rankings={r}
+                  winners={
+                    alliances.find((a) => a.status?.status === "won")?.picks ??
+                    []
+                  }
+                  picked={alliances.flatMap((a) => a.picks)}
+                />
+              )}
+            </Await>
+          </Suspense>
         </TabsContent>
         <TabsContent value="awards">
           {/* <AwardsTab awards={awards} /> */}
@@ -256,13 +304,24 @@ export default function Event() {
           {/* <TeamsTab teams={teams} /> */}
         </TabsContent>
         <TabsContent value="insights">
-          <MaybeComponent
+          {/* <MaybeComponent
             query={oprsQuery}
             renderSkeleton={() => <div>Loading...</div>}
             renderComponent={(data) => (
               <CoprTableView eventOprs={data} eventYear={event.year} />
             )}
-          />
+          /> */}
+          <Suspense>
+            <Await resolve={oprs}>
+              {(data) => (
+                <div>
+                  <CoprScatterChart coprs={data} />
+                  <CoprBarChart coprs={data} />
+                  <CoprTableView eventOprs={data} eventYear={event.year} />
+                </div>
+              )}
+            </Await>
+          </Suspense>
         </TabsContent>
         <TabsContent value="media">
           <MediaTab />
@@ -270,10 +329,6 @@ export default function Event() {
       </Tabs>
     </>
   );
-}
-
-function RankingsTab({ rankings }: { rankings: Event_Ranking }) {
-  return <RankingsTable rankings={rankings} />;
 }
 
 function AwardsTab({ awards }: { awards: Award[] }) {

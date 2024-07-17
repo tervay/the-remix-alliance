@@ -1,25 +1,17 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, json, useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import { promiseHash } from "remix-utils/promise";
-import {
-  useTeamServiceGetTeamEventsByYear,
-  useTeamServiceGetTeamMatchesByYear,
-  useTeamServiceGetTeamMediaByYear,
-  useTeamServiceGetTeamSocialMedia,
-} from "~/api/queries";
+import { defer } from "@remix-run/node";
+import { Await, Link, useLoaderData } from "@remix-run/react";
+import { Suspense } from "react";
 import {
   type Event,
   type Match,
   type Media,
   type Team,
-  TeamService,
-  type WLT_Record,
-} from "~/api/requests";
+  type WltRecord,
+  getTeam,
+  getTeamEventsByYear,
+} from "~/api/tba";
 import InlineIcon from "~/components/tba/inlineIcon";
-import MaybeComponent from "~/components/tba/maybeComponent";
-import { SEASON_EVENT_TYPES } from "~/lib/api/EventType";
-import { getCurrentDefaultYear } from "~/lib/utils";
 import BiCalendar from "~icons/bi/calendar";
 import BiFacebook from "~icons/bi/facebook";
 import BiGithub from "~icons/bi/github";
@@ -37,11 +29,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Error("Missing teamNumber");
   }
 
-  return json(
-    await promiseHash({
-      team: TeamService.getTeam({ teamKey: `frc${params.teamNumber}` }),
-    }),
-  );
+  const teamEvents = getTeamEventsByYear({
+    teamKey: `frc${params.teamNumber}`,
+    year: 2024,
+  });
+
+  const team = await getTeam({
+    teamKey: `frc${params.teamNumber}`,
+  });
+
+  return defer({
+    team,
+    teamEvents,
+  });
 }
 
 function TeamSocials({ media }: { media: Media[] }) {
@@ -137,11 +137,11 @@ function calculateRecords(
   events: Event[],
   matches: Match[],
 ): {
-  official: WLT_Record;
-  overall: WLT_Record;
+  official: WltRecord;
+  overall: WltRecord;
 } {
-  const rec: WLT_Record = { losses: 0, ties: 0, wins: 0 };
-  const overallRec: WLT_Record = { losses: 0, ties: 0, wins: 0 };
+  const rec: WltRecord = { losses: 0, ties: 0, wins: 0 };
+  const overallRec: WltRecord = { losses: 0, ties: 0, wins: 0 };
 
   for (const event of events) {
     const official = SEASON_EVENT_TYPES.has(event.event_type);
@@ -185,68 +185,11 @@ function calculateRecords(
 }
 
 export default function TeamPage() {
-  const { team } = useLoaderData<typeof loader>();
-
-  const [overallRecord, setOverallRecord] = useState<WLT_Record>({
-    losses: 0,
-    ties: 0,
-    wins: 0,
-  });
-  const [officialRecord, setOfficialRecord] = useState<WLT_Record>({
-    losses: 0,
-    ties: 0,
-    wins: 0,
-  });
-  const [playedInOffseason, setPlayedInOffseason] = useState(false);
-
-  const teamEventsQuery = useTeamServiceGetTeamEventsByYear({
-    teamKey: team.key,
-    year: getCurrentDefaultYear(),
-  });
-
-  const teamMatchesQuery = useTeamServiceGetTeamMatchesByYear({
-    teamKey: team.key,
-    year: getCurrentDefaultYear(),
-  });
-
-  const teamSocialsQuery = useTeamServiceGetTeamSocialMedia({
-    teamKey: team.key,
-  });
-
-  const teamPicsQuery = useTeamServiceGetTeamMediaByYear({
-    teamKey: team.key,
-    year: getCurrentDefaultYear(),
-  });
-
-  useEffect(() => {
-    if (
-      teamEventsQuery.data === undefined ||
-      teamMatchesQuery.data === undefined
-    ) {
-      return;
-    }
-
-    const records = calculateRecords(
-      team,
-      teamEventsQuery.data,
-      teamMatchesQuery.data,
-    );
-
-    setOfficialRecord(records.official);
-    setOverallRecord(records.overall);
-
-    if (
-      records.official.wins !== records.overall.wins ||
-      records.official.losses !== records.overall.losses ||
-      records.official.ties !== records.overall.ties
-    ) {
-      setPlayedInOffseason(true);
-    }
-  }, [teamEventsQuery.data, teamMatchesQuery.data, team]);
+  const { team, teamEvents } = useLoaderData<typeof loader>();
 
   return (
-    <div className="">
-      <div className="flex">
+    <div className="w-5/6">
+      <div className="flex justify-between">
         <div className="basis-1/2">
           <div className="text-3xl font-semibold">
             Team {team.team_number} - {team.nickname}
@@ -283,54 +226,17 @@ export default function TeamPage() {
               Statbotics
             </Link>
           </InlineIcon>
-
-          <MaybeComponent
-            query={teamSocialsQuery}
-            renderComponent={(data) => <TeamSocials media={data} />}
-            renderSkeleton={() => <></>}
-          />
         </div>
-
-        <MaybeComponent
-          query={teamPicsQuery}
-          renderComponent={(data) => {
-            const pic = getPrimaryRobotPic(data);
-            if (pic === undefined) {
-              return <></>;
-            }
-
-            return (
-              <div className="basis-1/2">
-                <img src={pic.direct_url} alt="Robot" />
-              </div>
-            );
-          }}
-          renderSkeleton={() => <></>}
-        />
       </div>
-
+      <hr className="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
       <div className="text-3xl font-semibold">Events Results</div>
-      <p>
-        Team {team.team_number} was{" "}
-        <strong>
-          {officialRecord.wins}-{officialRecord.losses}
-          {officialRecord.ties > 0 ? `-${officialRecord.ties}` : ""}
-        </strong>{" "}
-        in official play{" "}
-        {playedInOffseason ? (
-          <>
-            and{" "}
-            <strong>
-              {overallRecord.wins}-{overallRecord.losses}
-              {overallRecord.ties > 0 ? `-${overallRecord.ties}` : ""}
-            </strong>{" "}
-            overall{" "}
-          </>
-        ) : (
-          <></>
-        )}
-        in {getCurrentDefaultYear()}.
-      </p>
+
+      <Suspense fallback={<div>loading..</div>}>
+        <Await resolve={teamEvents}>
+          {/* {(users) => <pre>{JSON.stringify(users, null, 2)}</pre>} */}
+          {(teamEvents) => <div>{teamEvents.length}</div>}
+        </Await>
+      </Suspense>
     </div>
   );
 }

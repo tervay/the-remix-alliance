@@ -2,10 +2,9 @@ import { Link } from "@remix-run/react";
 import { type VariantProps, cva } from "class-variance-authority";
 import { zip } from "lodash-es";
 import type React from "react";
-import type { Match } from "~/api/requests";
+import type { Match } from "~/api/tba";
 import { cn, sortMatchComparator } from "~/lib/utils";
 import PlayCircle from "~icons/bi/play-circle";
-import BiDot from "~icons/bi/dot";
 
 const cellVariants = cva("", {
   variants: {
@@ -52,6 +51,8 @@ function GridCell({
   matchResult,
   allianceColor,
   teamOrScore,
+  dq,
+  surrogate,
   ...props
 }: CellProps) {
   return (
@@ -60,8 +61,8 @@ function GridCell({
         cellVariants({ matchResult, allianceColor, teamOrScore }),
         className,
         {
-          "line-through": props.dq,
-          "underline decoration-dotted": props.surrogate,
+          "line-through": dq,
+          "underline decoration-dotted": surrogate,
         },
       )}
       {...props}
@@ -105,7 +106,7 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
     "[&>*]:border-[#ddd] [&>*]:border-[1px]",
     // use these on desktop:
     "lg:grid-rows-1",
-    "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(6,minmax(0,1fr))_0.75fr_0.75fr]",
+    "lg:grid-cols-[calc(1.25em+6px*2)_8em_repeat(6,minmax(0,1fr))_0.9fr_0.9fr]",
     "lg:border-[#ddd] lg:border-b-[1px]",
     "[&>*]:lg:border-0 [&>*]:lg:border-r-[1px]", // reset the border, then apply one to the right
   );
@@ -116,13 +117,17 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
 
       <div className="border-[#ddd] border-t-[1px] border-l-[1px]">
         <div className={cn(gridStyle, "bg-[#f0f0f0] font-semibold")}>
-          <div>
+          <div className="row-span-2 lg:row-span-1">
             <PlayCircle className="inline" />
           </div>
-          <div>Match</div>
-          <div className="col-span-3">Red Alliance</div>
-          <div className="col-span-3 col-start-6">Blue Alliance</div>
-          <div className="col-span-2 col-start-9">Scores</div>
+          <div className="row-span-2 lg:row-span-1">Match</div>
+          <div className="col-span-3 lg:col-span-3">Red Alliance</div>
+          <div className="col-span-3 col-start-3 lg:col-start-6">
+            Blue Alliance
+          </div>
+          <div className="row-span-2 col-start-6 row-start-1 lg:col-span-2 lg:col-start-9">
+            Scores
+          </div>
         </div>
 
         {props.matches.map((m) => (
