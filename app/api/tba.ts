@@ -127,7 +127,7 @@ export type Event = {
     event_code: string;
     /** Event Type, as defined here: https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py#L2 */
     event_type: number;
-    district?: null | DistrictList;
+    district?: DistrictList;
     /** City, town, village, etc. the event is located in. */
     city?: string;
     /** State or Province the event is located in. */
@@ -187,7 +187,7 @@ export type EventSimple = {
     event_code: string;
     /** Event Type, as defined here: https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py#L2 */
     event_type: number;
-    district?: null | DistrictList;
+    district?: DistrictList;
     /** City, town, village, etc. the event is located in. */
     city?: string;
     /** State or Province the event is located in. */
@@ -241,7 +241,7 @@ export type TeamEventStatusAllianceBackup = {
     "out"?: string;
     /** TBA key for the backup team called in. */
     "in"?: string;
-};
+} | null;
 export type TeamEventStatusAlliance = {
     /** Alliance name, may be null. */
     name?: string | null;
@@ -260,7 +260,7 @@ export type TeamEventStatusPlayoff = {
     status?: "won" | "eliminated" | "playing";
     /** The average match score during playoffs. Year specific. May be null if not relevant for a given year. */
     playoff_average?: number | null;
-};
+} | null;
 export type TeamEventStatus = {
     qual?: TeamEventStatusRank;
     alliance?: TeamEventStatusAlliance;
@@ -691,7 +691,7 @@ export type Match = {
     /** UNIX timestamp (seconds since 1-Jan-1970 00:00:00) when the match result was posted. */
     post_result_time?: number;
     /** Score breakdown for auto, teleop, etc. points. Varies from year to year. May be null. */
-    score_breakdown?: MatchScoreBreakdown2015Alliance | MatchScoreBreakdown2016Alliance | MatchScoreBreakdown2017Alliance | MatchScoreBreakdown2018Alliance | MatchScoreBreakdown2019Alliance | MatchScoreBreakdown2020Alliance | MatchScoreBreakdown2022Alliance | MatchScoreBreakdown2023Alliance | MatchScoreBreakdown2024Alliance | null;
+    score_breakdown?: (MatchScoreBreakdown2015Alliance | MatchScoreBreakdown2016Alliance | MatchScoreBreakdown2017Alliance | MatchScoreBreakdown2018Alliance | MatchScoreBreakdown2019Alliance | MatchScoreBreakdown2020Alliance | MatchScoreBreakdown2022Alliance | MatchScoreBreakdown2023Alliance | MatchScoreBreakdown2024Alliance) | null;
     /** Array of video objects associated with this match. */
     videos?: {
         /** Can be one of 'youtube' or 'tba' */
@@ -815,7 +815,7 @@ export type EventRanking = {
         /** Additional special data on the team's performance calculated by TBA. */
         extra_stats?: number[];
         /** Additional year-specific information, may be null. See parent `sort_order_info` for details. */
-        sort_orders?: number[];
+        sort_orders?: number[] | null;
         record: WltRecord;
         /** The team's rank at the event as provided by FIRST. */
         rank: number;
