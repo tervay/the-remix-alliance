@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { parseDateString } from "@/lib/utils";
+import { cn, parseDateString } from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Await,
@@ -16,19 +16,23 @@ import {
   defer,
   useLoaderData,
 } from "@remix-run/react";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { promiseHash } from "remix-utils/promise";
 import {
   type Award,
+  type Event,
   type EventRanking,
   type Team,
   getEvent,
   getEventAlliances,
+  getEventAwards,
   getEventCopRs,
   getEventMatches,
   getEventRankings,
+  getEventTeams,
 } from "~/api/tba";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
+import Banner from "~/components/tba/banner";
 import CoprBarChart from "~/components/tba/coprBarChart";
 import CoprScatterChart from "~/components/tba/coprScatterChart";
 import CoprTableView from "~/components/tba/coprTable";
@@ -38,6 +42,7 @@ import RankingsTable from "~/components/tba/rankingsTable";
 import RelatedEventsDropdown from "~/components/tba/relatedEventsDropdown";
 import TeamPreviewDialog from "~/components/tba/teamPreviewDialog";
 import { Badge } from "~/components/ui/badge";
+import { BLUE_BANNER_AWARDS } from "~/lib/api/AwardType";
 import BiCalendar from "~icons/bi/calendar";
 import BiGraphUp from "~icons/bi/graph-up";
 import BiInfoCircleFill from "~icons/bi/info-circle-fill";
@@ -62,6 +67,8 @@ function delayedData(eventKey: string) {
   return {
     oprs: getEventCopRs({ eventKey }),
     rankings: getEventRankings({ eventKey }),
+    teams: getEventTeams({ eventKey }),
+    awards: getEventAwards({ eventKey }),
   };
 }
 
@@ -108,8 +115,16 @@ export function HydrateFallback() {
 }
 
 export default function EventPage() {
-  const { event, matches, alliances, parentEvent, rankings, oprs } =
-    useLoaderData<typeof loader>();
+  const {
+    event,
+    matches,
+    alliances,
+    parentEvent,
+    rankings,
+    oprs,
+    teams,
+    awards,
+  } = useLoaderData<typeof loader>();
   const startDate = parseDateString(event.start_date);
   const endDate = parseDateString(event.end_date);
 
@@ -298,10 +313,16 @@ export default function EventPage() {
           </Suspense>
         </TabsContent>
         <TabsContent value="awards">
-          {/* <AwardsTab awards={awards} /> */}
+          <Suspense>
+            <Await resolve={awards}>
+              {(awards) => <AwardsTab awards={awards} event={event} />}
+            </Await>
+          </Suspense>
         </TabsContent>
         <TabsContent value="teams">
-          {/* <TeamsTab teams={teams} /> */}
+          <Suspense>
+            <Await resolve={teams}>{(t) => <TeamsTab teams={t} />}</Await>
+          </Suspense>
         </TabsContent>
         <TabsContent value="insights">
           {/* <MaybeComponent
@@ -331,23 +352,56 @@ export default function EventPage() {
   );
 }
 
-function AwardsTab({ awards }: { awards: Award[] }) {
+function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
   return (
     <>
+      <div className="flex justify-evenly flex-wrap">
+        {awards
+          .filter((a) => BLUE_BANNER_AWARDS.has(a.award_type))
+          .map((a) => {
+            return (
+              <Fragment key={a.award_type}>
+                {a.recipient_list.map((r) => (
+                  <div
+                    className="flex flex-col basis-1/6"
+                    key={`${a.award_type}_${r.team_key}`}
+                  >
+                    <div className="text-2xl text-center font-bold">
+                      {r.team_key?.substring(3)}
+                    </div>
+                    <Banner
+                      title={"todo"}
+                      description={`${event.year} ${event.short_name}`}
+                    />
+                  </div>
+                ))}
+              </Fragment>
+            );
+          })}
+      </div>
       <Table className="table-fixed w-3/5 mx-auto">
         <TableHeader>
           <TableRow>
-            <TableHead>Award</TableHead>
-            <TableHead className="w-1/12">Winner</TableHead>
+            <TableHead className="text-left">Award</TableHead>
+            <TableHead className="text-right w-[10%]">Winner</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {awards
             .map((award) =>
               award.recipient_list.map((recipient) => (
-                <TableRow key={`${award.name}-${recipient.team_key}`}>
+                <TableRow
+                  key={`${award.name}-${recipient.team_key}`}
+                  className={cn({
+                    "bg-banner text-white": BLUE_BANNER_AWARDS.has(
+                      award.award_type,
+                    ),
+                  })}
+                >
                   <TableCell>{award.name}</TableCell>
-                  <TableCell>{recipient.team_key?.substring(3)}</TableCell>
+                  <TableCell className="text-right">
+                    {recipient.team_key?.substring(3)}
+                  </TableCell>
                 </TableRow>
               )),
             )
@@ -362,21 +416,13 @@ function AwardsTab({ awards }: { awards: Award[] }) {
 }
 
 function TeamsTab({ teams }: { teams: Team[] }) {
-  const firstHalfTeams = teams.slice(0, teams.length / 2);
-  const secondHalfTeams = teams.slice(teams.length / 2);
+  teams.sort((a, b) => a.team_number - b.team_number);
 
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col">
-        {firstHalfTeams.map((team) => (
-          <TeamPreviewDialog key={team.key} team={team} />
-        ))}
-      </div>
-      <div className="flex flex-col">
-        {secondHalfTeams.map((team) => (
-          <TeamPreviewDialog key={team.key} team={team} />
-        ))}
-      </div>
+    <div className="columns-2">
+      {teams.map((team) => (
+        <TeamPreviewDialog key={team.key} team={team} />
+      ))}
     </div>
   );
 }

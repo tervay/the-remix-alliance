@@ -9,8 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useQuery } from "@tanstack/react-query";
-import { type Team, getTeam } from "~/api";
+import type { Team } from "~/api/tba";
 import { Button } from "~/components/ui/button";
 
 export default function TeamPreviewDialog({ team }: { team: Team }) {
@@ -18,7 +17,7 @@ export default function TeamPreviewDialog({ team }: { team: Team }) {
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full">
             {team.team_number} - {team.nickname}
           </Button>
         </AlertDialogTrigger>

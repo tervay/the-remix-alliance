@@ -25,6 +25,9 @@ const config = {
       },
     },
     extend: {
+      dropShadow: {
+        banner: "0 5px 5px rgba(0, 0, 0, .1)",
+      },
       gridTemplateColumns: {
         "13": "repeat(13, minmax(0, 1fr))",
       },
@@ -69,6 +72,9 @@ const config = {
         "alliance-red": {
           light: "#fee",
           dark: "#fdd",
+        },
+        banner: {
+          DEFAULT: "#0f4bcb",
         },
       },
       borderRadius: {
