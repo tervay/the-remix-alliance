@@ -82,6 +82,7 @@ export enum AwardType {
   CONCEPT = 79,
   GAME_DESIGN_CHALLENGE_WINNER = 80,
   GAME_DESIGN_CHALLENGE_FINALIST = 81,
+  SUSTAINABILITY = 82,
 }
 
 export const BLUE_BANNER_AWARDS = new Set([
@@ -111,3 +112,50 @@ export const NON_JUDGED_NON_TEAM_AWARDS = new Set([
   AwardType.FINALIST,
   AwardType.WILDCARD,
 ]);
+
+export const MACHINE_AWARDS = new Set([
+  AwardType.AUTONOMOUS,
+  AwardType.CREATIVITY,
+  AwardType.ENGINEERING_EXCELLENCE,
+  AwardType.INDUSTRIAL_DESIGN,
+  AwardType.INNOVATION_IN_CONTROL,
+  AwardType.QUALITY,
+]);
+
+export const TEAM_ATTRIBUTE_AWARDS = new Set([
+  AwardType.ENGINEERING_INSPIRATION,
+  AwardType.GRACIOUS_PROFESSIONALISM,
+  AwardType.IMAGERY,
+  AwardType.JUDGES,
+  AwardType.ROOKIE_ALL_STAR,
+  AwardType.ROOKIE_INSPIRATION,
+  AwardType.SPIRIT,
+  AwardType.SUSTAINABILITY,
+]);
+
+export const SUBMITTED_AWARDS = new Set([
+  AwardType.CHAIRMANS,
+  AwardType.CHAIRMANS_FINALIST,
+  AwardType.DEANS_LIST,
+  AwardType.SAFETY,
+  AwardType.WOODIE_FLOWERS,
+]);
+
+export const ROBOT_PERFORMANCE_AWARDS = new Set([
+  AwardType.FINALIST,
+  AwardType.WINNER,
+]);
+
+export enum AwardCategory {
+  MACHINE_AWARDS = 1,
+  TEAM_ATTRIBUTE_AWARDS = 2,
+  SUBMITTED_AWARDS = 3,
+  ROBOT_PERFORMANCE_AWARDS = 4,
+}
+
+export const AWARD_CATEGORIES: { [key in AwardCategory]: Set<AwardType> } = {
+  [AwardCategory.MACHINE_AWARDS]: MACHINE_AWARDS,
+  [AwardCategory.TEAM_ATTRIBUTE_AWARDS]: TEAM_ATTRIBUTE_AWARDS,
+  [AwardCategory.SUBMITTED_AWARDS]: SUBMITTED_AWARDS,
+  [AwardCategory.ROBOT_PERFORMANCE_AWARDS]: ROBOT_PERFORMANCE_AWARDS,
+};

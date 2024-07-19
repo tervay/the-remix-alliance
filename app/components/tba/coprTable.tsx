@@ -18,14 +18,14 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import type { Event_COPRs } from "~/api/requests";
+import type { EventCopRs } from "~/api/tba";
 import { Switch } from "~/components/ui/switch";
 import type { DataTableProps } from "~/lib/utils";
 
 export default function CoprTableView({
   eventOprs,
   eventYear,
-}: { eventOprs: Event_COPRs; eventYear: number }) {
+}: { eventOprs: EventCopRs; eventYear: number }) {
   const teamCoprLookup: Record<string, Record<string, number>> = {};
   for (const [componentKey, teamToCoprMap] of Object.entries(eventOprs)) {
     for (const [teamKey, copr] of Object.entries(teamToCoprMap)) {
@@ -68,10 +68,7 @@ export default function CoprTableView({
   );
 }
 
-function getDefaultlyEnabledColumns(
-  year: number,
-  coprs: Event_COPRs,
-): string[] {
+function getDefaultlyEnabledColumns(year: number, coprs: EventCopRs): string[] {
   return Object.keys(coprs).filter((k) => k.includes(" "));
 }
 

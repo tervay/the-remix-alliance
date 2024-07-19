@@ -1,0 +1,438 @@
+<svg xmlns="http://www.w3.org/2000/svg" data-stacking-context="true" aria-owns="usdvqafga1"
+    width="160" height="240" viewBox="45 203 160 240">
+    <g data-tag="html" class="usdvqafga idc0_350" data-z-index="auto" data-stacking-context="true"
+        aria-owns="head1 flex1">
+        <g data-tag="body" class="flex flex-col min-h-screen" data-z-index="auto"
+            data-stacking-context="true" aria-owns="mx-auto1 script1 mt-auto1 script2 script3">
+            <path fill="#FFF" d="M0-200h798v1710.80004883H0z"
+                data-stacking-layer="rootBackgroundAndBorders" />
+            <g data-tag="div" class="mx-auto px-4 container text-sm" data-z-index="auto"
+                data-stacking-context="true" aria-owns="flex2 div1">
+                <g data-tag="div" class="flex flex-col mb-2.5" data-z-index="auto"
+                    data-stacking-context="true"
+                    aria-owns="text-4xl1 radix-:R4j5: [&amp;&gt;*:first-child]:inline1 [&amp;&gt;*:first-child]:inline2 [&amp;&gt;*:first-child]:inline3 [&amp;&gt;*:first-child]:inline4 [&amp;&gt;*:first-child]:inline5">
+                    <g data-tag="div"
+                        class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="svg1 align-text-top1">
+                        <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                            mask="url(#a)" aria-owns="path1">
+                            <mask id="a">
+                                <path fill="#fff" d="M31-71.90000153h14v14H31z" />
+                            </mask>
+                        </g>
+                    </g>
+                    <g data-tag="div"
+                        class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="svg2 align-text-top2">
+                        <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                            mask="url(#b)" aria-owns="g1">
+                            <mask id="b">
+                                <path fill="#fff" d="M31-50.29999924h14v14H31z" />
+                            </mask>
+                        </g>
+                    </g>
+                    <g data-tag="div"
+                        class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="svg3 align-text-top3">
+                        <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                            mask="url(#c)" aria-owns="g2">
+                            <mask id="c">
+                                <path fill="#fff" d="M31-28.70000076h14v14H31z" />
+                            </mask>
+                        </g>
+                    </g>
+                    <g data-tag="div"
+                        class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="svg4 align-text-top4">
+                        <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                            mask="url(#d)" aria-owns="path6">
+                            <mask id="d">
+                                <path fill="#fff" d="M31-7.0999999h14v14H31z" />
+                            </mask>
+                        </g>
+                    </g>
+                    <g data-tag="div"
+                        class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="svg5 align-text-top5">
+                        <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                            mask="url(#e)" aria-owns="path7">
+                            <mask id="e">
+                                <path fill="#fff" d="M31 14.5h14v14H31z" />
+                            </mask>
+                        </g>
+                    </g>
+                </g>
+                <g data-tag="div" data-z-index="auto" data-stacking-context="true"
+                    aria-owns="rounded-md1 radix-:R135:-content-results radix-:R135:-content-rankings radix-:R135:-content-awards radix-:R135:-content-teams radix-:R135:-content-insights radix-:R135:-content-media">
+                    <g data-tag="div"
+                        class="rounded-md bg-muted p-1 text-muted-foreground flex items-center justify-evenly flex-wrap h-auto [&amp;&gt;*]:basis-1/2 lg:[&amp;&gt;*]:basis-1"
+                        data-z-index="auto" data-stacking-context="true" tabindex="0"
+                        aria-orientation="horizontal"
+                        aria-owns="radix-:R135:-trigger-results radix-:R135:-trigger-rankings radix-:R135:-trigger-awards radix-:R135:-trigger-teams radix-:R135:-trigger-insights radix-:R135:-trigger-media">
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="-1"
+                            aria-selected="false" aria-controls="radix-:R135:-content-results"
+                            aria-owns="[&amp;&gt;*:first-child]:inline6">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg6 align-text-top6">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#f)" aria-owns="path8">
+                                    <mask id="f">
+                                        <path fill="#fff" d="M184.89375305 56.10000229h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="-1"
+                            aria-selected="false" aria-controls="radix-:R135:-content-rankings"
+                            aria-owns="[&amp;&gt;*:first-child]:inline7">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg7 align-text-top7">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#g)" aria-owns="g3">
+                                    <mask id="g">
+                                        <path fill="#fff" d="M543.28125 56.10000229h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="0"
+                            aria-selected="true" aria-controls="radix-:R135:-content-awards"
+                            aria-owns="[&amp;&gt;*:first-child]:inline8">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg8 align-text-top8">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#h)" aria-owns="path11">
+                                    <mask id="h">
+                                        <path fill="#fff" d="M184.75 89.70000458h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="-1"
+                            aria-selected="false" aria-controls="radix-:R135:-content-teams"
+                            aria-owns="[&amp;&gt;*:first-child]:inline9">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg9 align-text-top9">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#i)" aria-owns="path12">
+                                    <mask id="i">
+                                        <path fill="#fff" d="M551.05627441 89.70000458h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="-1"
+                            aria-selected="false" aria-controls="radix-:R135:-content-insights"
+                            aria-owns="[&amp;&gt;*:first-child]:inline10">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg10 align-text-top10">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#j)" aria-owns="path13">
+                                    <mask id="j">
+                                        <path fill="#fff" d="M183.18125916 123.30000305h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                        <g data-tag="button"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                            data-z-index="auto" data-stacking-context="true" tabindex="-1"
+                            aria-selected="false" aria-controls="radix-:R135:-content-media"
+                            aria-owns="[&amp;&gt;*:first-child]:inline11">
+                            <g data-tag="div"
+                                class="[&amp;&gt;*:first-child]:inline [&amp;&gt;*:first-child]:mr-[0.25em] [&amp;&gt;*:first-child]:h-[1em] [&amp;&gt;*:first-child]:w-[1em]"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="svg11 align-text-top11">
+                                <g data-tag="svg" data-z-index="auto" data-stacking-context="true"
+                                    mask="url(#k)" aria-owns="path14">
+                                    <mask id="k">
+                                        <path fill="#fff" d="M552.83752441 123.30000305h14v14h-14z" />
+                                    </mask>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g data-tag="div"
+                        class="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        data-z-index="auto" data-stacking-context="true" tabindex="0"
+                        aria-labelledby="radix-:R135:-trigger-awards" aria-owns="flex3">
+                        <g data-tag="div" class="flex flex-wrap-reverse" data-z-index="auto"
+                            data-stacking-context="true" aria-owns="flex4 flow-root1">
+                            <g data-tag="div"
+                                class="flex justify-evenly flex-wrap sm:basis-1/4 mt-8 sm:mt-4"
+                                data-z-index="auto" data-stacking-context="true"
+                                aria-owns="flex5 flex6 flex7 flex8">
+                                <g data-tag="div" class="flex flex-col" data-z-index="auto"
+                                    data-stacking-context="true" aria-owns="text-2xl1 bg-banner1">
+                                    <g data-tag="div"
+                                        class="bg-banner text-white inline-block h-[230px] w-[140px] leading-[1.2] mb-[40px] p-2 relative text-center align-top whitespace-normal drop-shadow-banner after:drop-shadow-banner self-center"
+                                        data-z-index="auto" data-stacking-context="true"
+                                        aria-owns="my-[10px]1 w-full1 h-[50px]1 span1">
+                                        <path fill="#0F4BCB" d="M53 206.80000305h140v230H53z"
+                                            data-stacking-layer="rootBackgroundAndBorders" />
+                                        <g data-tag="img"
+                                            class="my-[10px] w-[75px] max-h-[45px] mx-auto"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-label="2024 Milstein" mask="url(#l)">
+                                            <mask id="l">
+                                                <path fill="#fff"
+                                                    d="M85.5 224.80000305h75v44.875h-75z" />
+                                            </mask>
+                                            <g color="#000" class="svg-content"
+                                                data-view-box="0 0 165.17332 98.839996"
+                                                data-width="75" data-height="44.875" data-tag="img">
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M595.828 505.742c21.801 0 42.973-1.992 63.184-5.679l48.078 50.093c-33.621 11.645-71.367 18.172-111.262 18.172-67.836 0-129.418-18.91-175.086-49.707l41.899-39.687c38.742 16.972 84.328 26.808 133.187 26.808"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#fff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M595.828 568.328c39.895 0 77.641-6.527 111.262-18.172l52.273 54.422c-48.777 19.231-104.414 30.152-163.535 30.152-88.129 0-168.539-24.253-229.91-64.156l54.824-51.953c45.668 30.797 107.25 49.707 175.086 49.707"
+                                                    fill="#FFF"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M344.824 355.391c4.395 17.968 12.512 35 23.707 50.75l-21.058 21.304c-4.172-13.09-6.481-26.722-6.481-40.757 0-10.668 1.332-21.114 3.832-31.297M189.215 237.637l-8.84-45.832 87.969 37.871c-5.551 11.679-6.641 26.906-9.848 39.289l-69.281-31.328m-61.902 498.449L0 38.9063l60.2148-4.9024L186.277 741.316l-58.964-5.23"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#ed1c24;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M555.438 334.891v56.382l-92.473 87.661-41.879 39.687-54.848 51.953L186.07 741.328 59.9609 34.0039 326.797 151.309c-26.567 23.464-45.395 48.484-59.387 77.968l-86.859-37.257 8.711 45.597 56.285 293.356 4.703 24.621 46.469-46.789 59.801-60.215 25.664-25.891 105.546-90.922-102.453-46.953c26.614-26.57 58.129-49.988 100.625-63.215l127.828 57.395-58.292 55.887"
+                                                    fill="#ED1C24"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M846.816 355.391c2.481 10.183 3.848 20.629 3.848 31.297 0 31.484-11.516 61.21-31.328 87.019l-30.352-31.422c29.153-24.254 49.856-54.14 57.832-86.894m57.051-298.3871-71.926 69.0981c-11.503-7.848-23.796-15.137-36.668-21.825L903.867 0l334.883 348.797-.37 56.48L903.867 57.0039M659.844 291.258l-59.239 56.887-45.328 43.277-.16-56.531 63.731-61.211 60.918-58.512c15.476 3.863 30.285 8.719 44.207 14.508l-64.129 61.582"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="m892.695 606.688-47.675-49.633-52.579-54.793-35.859-37.313-67.93-70.738 28.457-27.316 72.278 75.242 30.222 31.476 55.371 57.645 17.715 18.465 184.145-176.524 28.48 29.574-212.625 203.915"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#fff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="m874.98 531.258-55.371-57.645c19.817-25.812 31.055-55.441 31.055-86.925 0-10.668-1.367-21.114-3.848-31.297-6.464-26.496-20.988-51.036-41.711-72.278-21.199-21.734-48.906-40.039-81.132-53.437-13.922-5.789-28.731-10.645-44.207-14.508-26.27-6.516-54.524-10.109-83.938-10.109-36.238 0-70.66 5.39-101.859 15.109-42.504 13.25-78.949 34.488-105.582 61.082-9.715 9.688-18.106 20.117-25.039 31.121-8.528 13.535-14.832 27.942-18.524 43.02-2.5 10.183-3.832 20.629-3.832 31.297 0 14.035 2.309 27.667 6.481 40.757l-63.586 64.371c-23.289-34.535-36.43-73.449-36.43-114.66 0-10.597.981-21.043 2.664-31.297 4.074-24.921 13.008-48.691 26-70.879 6.516-11.152 14.082-21.894 22.606-32.16 22.371-26.98 51.214-50.691 85.027-69.91 58.707-33.39 132.223-53.312 212.074-53.312 55.871 0 108.606 9.738 155.383 27.011 14.199 5.227 27.812 11.164 40.84 17.735 30.156 15.273 56.914 33.918 79.238 55.246 37.473 35.789 62.5 79.051 70.242 126.269 1.692 10.254 2.649 20.7 2.649 31.297 0 57.793-25.735 111.149-69.2 154.102"
+                                                    fill="#FFF"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#1c63b7;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="m659.543 290.84 63.914-61.387c32.188 13.426 60.129 31.492 81.367 53.242l-87.636 84.149-28.458 27.301 67.571 70.371 35.816 37.324 52.602 54.797 47.683 49.629 212.118-203.649-28.47-29.679-173.784-180.934c-18.301-25.09-42.043-47.356-70.118-66.574l71.415-68.8792L1238.45 405.313 889.68 740.191 759.055 604.156l-52.278-54.433-48.105-50.094-103.395-108.207L659.543 290.84"
+                                                    fill="#1C63B7"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M364.797 310.633s1.668-2.754 1.859-3.055c5.117-8.137 12.145-15.574 18.797-23.008l104.184 48.145-239.422 222.957-6.527-34.484 187.835-185.973-66.726-24.582"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                                <path
+                                                    style="fill:#959596;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                                                    d="M944.18 377.156c0-10.597-.957-21.043-2.649-31.297-7.742-47.218-32.769-90.48-70.242-126.269-22.324-21.328-49.082-39.973-79.238-55.246-13.028-6.571-26.641-12.508-40.84-17.735-46.777-17.273-99.512-27.011-155.383-27.011-79.851 0-153.367 19.922-212.074 53.312-33.813 19.219-62.656 42.93-85.027 69.91-8.524 10.266-16.09 21.008-22.606 32.16-12.992 22.188-21.926 45.958-26 70.879-1.683 10.254-2.664 20.7-2.664 31.297 0 3.34.258 6.629.418 9.914-.031.176-.098.434-.113.598-1.699-10.27-.305-62.531-.305-73.117 0-16.809 2.246-33.203 6.398-49.113 3.243-12.422 7.688-24.481 13.235-36.161 13.988-29.484 34.969-56.504 61.547-79.992 63.941-56.3866 159.894-92.2811 267.191-92.2811 74.453 0 143.391 17.3203 200.012 46.7261 12.859 6.688 25.098 13.985 36.582 21.836 28.074 19.207 51.844 41.77 70.144 66.856 26.536 36.308 41.614 77.918 41.614 122.129 0 9.316.8 53.515-.098 71.058-.156 2.407.098-5.406.098-8.453"
+                                                    fill="#959596"
+                                                    transform="matrix(.06054 0 0 -.06054 85.5043 269.67504028)" />
+                                            </g>
+                                        </g>
+                                        <g data-tag="div"
+                                            class="w-full h-[35px] font-bold mx-0 my-[3px] table text-sm"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-owns="align-middle1">
+                                            <text color="#FFF" dominant-baseline="text-after-edge"
+                                                font-family="Roboto, ui-sans-serif, system-ui, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;"
+                                                font-size="14" font-stretch="100%" font-weight="700"
+                                                text-decoration="none solid rgb(255, 255, 255)"
+                                                word-spacing="0" writing-mode="horizontal-tb"
+                                                fill="#FFF" data-tag="span"
+                                                class="align-middle uppercase table-cell pt-2"
+                                                data-z-index="auto" data-stacking-context="true">
+                                                <tspan xml:space="preserve" x="95.53125"
+                                                    y="309.57501221" textLength="54.9375"
+                                                    lengthAdjust="spacingAndGlyphs">BANNER</tspan>
+                                            </text>
+                                        </g>
+                                        <g data-tag="div" class="h-[50px] w-full table"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-owns="align-middle2">
+                                            <g data-tag="span"
+                                                class="align-middle max-w-[calc(140px-2*8px)] text-ellipsis overflow-hidden text-xs leading-[130%] uppercase table-cell pt-20"
+                                                data-z-index="auto" data-stacking-context="true"
+                                                mask="url(#m)">
+                                                <mask id="m">
+                                                    <path fill="#fff"
+                                                        d="M61 317.67501831h124v95.59999847H61z" />
+                                                </mask>
+                                                <text color="#FFF"
+                                                    dominant-baseline="text-after-edge"
+                                                    font-family="Roboto, ui-sans-serif, system-ui, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;"
+                                                    font-size="12" font-stretch="100%"
+                                                    font-weight="400"
+                                                    text-decoration="none solid rgb(255, 255, 255)"
+                                                    word-spacing="0" writing-mode="horizontal-tb"
+                                                    fill="#FFF">
+                                                    <tspan xml:space="preserve" x="85.46250153"
+                                                        y="412.875" textLength="75.07500458"
+                                                        lengthAdjust="spacingAndGlyphs">DESCRIPTION</tspan>
+                                                </text>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g data-tag="div" class="flex flex-col" data-z-index="auto"
+                                    data-stacking-context="true" aria-owns="text-2xl2 bg-banner2">
+                                    <g data-tag="div"
+                                        class="bg-banner text-white inline-block h-[230px] w-[140px] leading-[1.2] mb-[40px] p-2 relative text-center align-top whitespace-normal drop-shadow-banner after:drop-shadow-banner self-center"
+                                        data-z-index="auto" data-stacking-context="true"
+                                        aria-owns="my-[10px]2 w-full2 h-[50px]2 span2">
+                                        <g data-tag="img"
+                                            class="my-[10px] w-[75px] max-h-[45px] mx-auto"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-label="2024 Milstein" mask="url(#n)">
+                                            <mask id="n">
+                                                <path fill="#fff"
+                                                    d="M85.5 526.79998779h75v44.875h-75z" />
+                                            </mask>
+                                        </g>
+                                        <g data-tag="div" class="h-[50px] w-full table"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-owns="align-middle4">
+                                            <g data-tag="span"
+                                                class="align-middle max-w-[calc(140px-2*8px)] text-ellipsis overflow-hidden text-xs leading-[130%] uppercase table-cell pt-20"
+                                                data-z-index="auto" data-stacking-context="true"
+                                                mask="url(#o)">
+                                                <mask id="o">
+                                                    <path fill="#fff"
+                                                        d="M61 619.67498779h124v95.59999847H61z" />
+                                                </mask>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g data-tag="div" class="flex flex-col" data-z-index="auto"
+                                    data-stacking-context="true" aria-owns="text-2xl3 bg-banner3">
+                                    <g data-tag="div"
+                                        class="bg-banner text-white inline-block h-[230px] w-[140px] leading-[1.2] mb-[40px] p-2 relative text-center align-top whitespace-normal drop-shadow-banner after:drop-shadow-banner self-center"
+                                        data-z-index="auto" data-stacking-context="true"
+                                        aria-owns="my-[10px]3 w-full3 h-[50px]3 span3">
+                                        <g data-tag="img"
+                                            class="my-[10px] w-[75px] max-h-[45px] mx-auto"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-label="2024 Milstein" mask="url(#p)">
+                                            <mask id="p">
+                                                <path fill="#fff"
+                                                    d="M85.5 828.79998779h75v44.875h-75z" />
+                                            </mask>
+                                        </g>
+                                        <g data-tag="div" class="h-[50px] w-full table"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-owns="align-middle6">
+                                            <g data-tag="span"
+                                                class="align-middle max-w-[calc(140px-2*8px)] text-ellipsis overflow-hidden text-xs leading-[130%] uppercase table-cell pt-20"
+                                                data-z-index="auto" data-stacking-context="true"
+                                                mask="url(#q)">
+                                                <mask id="q">
+                                                    <path fill="#fff"
+                                                        d="M61 921.67498779h124v95.59999847H61z" />
+                                                </mask>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g data-tag="div" class="flex flex-col" data-z-index="auto"
+                                    data-stacking-context="true" aria-owns="text-2xl4 bg-banner4">
+                                    <g data-tag="div"
+                                        class="bg-banner text-white inline-block h-[230px] w-[140px] leading-[1.2] mb-[40px] p-2 relative text-center align-top whitespace-normal drop-shadow-banner after:drop-shadow-banner self-center"
+                                        data-z-index="auto" data-stacking-context="true"
+                                        aria-owns="my-[10px]4 w-full4 h-[50px]4 span4">
+                                        <g data-tag="img"
+                                            class="my-[10px] w-[75px] max-h-[45px] mx-auto"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-label="2024 Milstein" mask="url(#r)">
+                                            <mask id="r">
+                                                <path fill="#fff"
+                                                    d="M85.5 1130.80004883h75v44.875h-75z" />
+                                            </mask>
+                                        </g>
+                                        <g data-tag="div" class="h-[50px] w-full table"
+                                            data-z-index="auto" data-stacking-context="true"
+                                            aria-owns="align-middle8">
+                                            <g data-tag="span"
+                                                class="align-middle max-w-[calc(140px-2*8px)] text-ellipsis overflow-hidden text-xs leading-[130%] uppercase table-cell pt-20"
+                                                data-z-index="auto" data-stacking-context="true"
+                                                mask="url(#s)">
+                                                <mask id="s">
+                                                    <path fill="#fff"
+                                                        d="M61 1223.67504883h124v95.59999847H61z" />
+                                                </mask>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g data-tag="footer"
+                class="mt-auto flex justify-center px-4 text-gray-800 bg-white dark:text-white dark:bg-gray-900"
+                data-z-index="auto" data-stacking-context="true" aria-owns="container1">
+                <g data-tag="div" class="container px-4 py-4" data-z-index="auto"
+                    data-stacking-context="true" aria-owns="flex9">
+                    <g data-tag="div" class="flex flex-col items-center justify-between md:flex-row"
+                        data-z-index="auto" data-stacking-context="true"
+                        aria-owns="flex10 flex11 grid17">
+                        <a data-tag="a" class="flex" data-z-index="auto"
+                            data-stacking-context="true" aria-owns="w-auto1 ml-21">
+                            <g data-tag="img" class="w-auto h-8 bg-blue-800 inline"
+                                data-z-index="auto" data-stacking-context="true" mask="url(#t)">
+                                <mask id="t">
+                                    <path fill="#fff" d="M32 1418.80004883h32v32H32z" />
+                                </mask>
+                            </g>
+                        </a>
+                        <g aria-owns="div2 div3">
+                            <g data-tag="div" data-z-index="auto" data-stacking-context="true"
+                                aria-owns="a27" class="flex flex-col align-middle">
+                                <a data-tag="a" data-z-index="auto" data-stacking-context="true"
+                                    aria-owns="h-51">
+                                    <g data-tag="img" class="h-5 inline" data-z-index="auto"
+                                        data-stacking-context="true" aria-label="AndyMark"
+                                        mask="url(#u)">
+                                        <mask id="u">
+                                            <path fill="#fff"
+                                                d="M178.3125 1426.17504883h111.10625458v20H178.3125z" />
+                                        </mask>
+                                    </g>
+                                </a>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

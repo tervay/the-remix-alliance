@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import type { EventCopRs } from "~/api/tba";
+import type { EventCopRs, EventOpRs } from "~/api/tba";
 
 interface Datapoint {
   teamKey: string;
@@ -94,4 +94,8 @@ export default function CoprBarChart({
       </Card>
     </div>
   );
+}
+
+export function OprBarChart({ oprs }: { oprs: EventOpRs }): JSX.Element {
+  return <div>hello</div>;
 }

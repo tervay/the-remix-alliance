@@ -56,7 +56,7 @@ export default function RankingsTable({
       data={rankings.rankings}
       conditionalRowStyling={(row) =>
         cn({
-          "bg-gray-100": picked.includes(row.original.team_key),
+          // "bg-gray-100": picked.includes(row.original.team_key),
           "bg-yellow-100 shadow-inner shadow-yellow-200 font-bold":
             winners.includes(row.original.team_key),
         })

@@ -2,8 +2,14 @@ import { Link } from "@remix-run/react";
 import { type VariantProps, cva } from "class-variance-authority";
 import { zip } from "lodash-es";
 import type React from "react";
+import { Fragment } from "react";
 import type { Match } from "~/api/tba";
-import { cn, sortMatchComparator } from "~/lib/utils";
+import {
+  cn,
+  parseDateString,
+  sortMatchComparator,
+  timestampsAreOnDifferentDays,
+} from "~/lib/utils";
 import PlayCircle from "~icons/bi/play-circle";
 
 const cellVariants = cva("", {
@@ -130,69 +136,100 @@ export default function MatchTable(props: { matches: Match[]; title: string }) {
           </div>
         </div>
 
-        {props.matches.map((m) => (
-          <div key={m.key} className={gridStyle}>
-            {/* play button and match title */}
-            <GridCell className="row-span-2">
-              {m.videos !== undefined && m.videos.length > 0 && (
-                <Link to={maybeGetFirstTeamVideoURL(m) ?? "#"}>
-                  <PlayCircle className="inline" />
-                </Link>
+        {props.matches.map((m, i) => (
+          <Fragment key={m.key}>
+            {i > 0 &&
+              props.matches[i - 1].actual_time &&
+              m.actual_time &&
+              timestampsAreOnDifferentDays(
+                props.matches[i - 1].actual_time ?? m.actual_time,
+                m.actual_time,
+              ) && (
+                <div
+                  className={cn(
+                    "bg-[#f0f0f0]",
+                    "font-semibold",
+                    "grid-cols-1",
+                    "align-middle",
+                    "text-center",
+                    "grid-rows-1",
+                    "py-1",
+                    "border-b-[1px]",
+                    "border-[#000]",
+                    "lg:border-[#ddd]",
+                  )}
+                >
+                  <GridCell>End of Day</GridCell>
+                </div>
               )}
-            </GridCell>
-            <GridCell className="row-span-2">{matchTitle(m)}</GridCell>
 
-            {/* red alliance */}
-            {m.alliances?.red?.team_keys.map((k) => (
+            <div className={gridStyle}>
+              {/* play button and match title */}
+              <GridCell className="row-span-2">
+                {m.videos !== undefined && m.videos.length > 0 && (
+                  <Link to={maybeGetFirstTeamVideoURL(m) ?? "#"}>
+                    <PlayCircle className="inline" />
+                  </Link>
+                )}
+              </GridCell>
+              <GridCell className="row-span-2">{matchTitle(m)}</GridCell>
+
+              {/* red alliance */}
+              {m.alliances?.red?.team_keys.map((k) => (
+                <GridCell
+                  key={k}
+                  allianceColor={"red"}
+                  matchResult={
+                    m.winning_alliance === "red" ? "winner" : "loser"
+                  }
+                  dq={m.alliances?.red?.dq_team_keys?.includes(k)}
+                  surrogate={m.alliances?.red?.surrogate_team_keys?.includes(k)}
+                >
+                  <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
+                </GridCell>
+              ))}
+
+              {/* blue alliance */}
+              {zip(m.alliances?.blue?.team_keys, [
+                "col-start-3 row-start-2 lg:col-start-6 lg:row-start-1",
+                "col-start-4 row-start-2 lg:col-start-7 lg:row-start-1",
+                "col-start-5 row-start-2 lg:col-start-8 lg:row-start-1",
+              ]).map(([k, x]) => (
+                <GridCell
+                  key={k}
+                  allianceColor={"blue"}
+                  matchResult={
+                    m.winning_alliance === "blue" ? "winner" : "loser"
+                  }
+                  className={x}
+                  dq={m.alliances?.blue?.dq_team_keys?.includes(k ?? "")}
+                  surrogate={m.alliances?.blue?.surrogate_team_keys?.includes(
+                    k ?? "",
+                  )}
+                >
+                  <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
+                </GridCell>
+              ))}
+
+              {/* scores */}
               <GridCell
-                key={k}
+                className="col-start-6 row-start-1 lg:col-start-9"
                 allianceColor={"red"}
                 matchResult={m.winning_alliance === "red" ? "winner" : "loser"}
-                dq={m.alliances?.red?.dq_team_keys?.includes(k)}
-                surrogate={m.alliances?.red?.surrogate_team_keys?.includes(k)}
+                teamOrScore={"score"}
               >
-                <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
+                {m.alliances?.red?.score}
               </GridCell>
-            ))}
-
-            {/* blue alliance */}
-            {zip(m.alliances?.blue?.team_keys, [
-              "col-start-3 row-start-2 lg:col-start-6 lg:row-start-1",
-              "col-start-4 row-start-2 lg:col-start-7 lg:row-start-1",
-              "col-start-5 row-start-2 lg:col-start-8 lg:row-start-1",
-            ]).map(([k, x]) => (
               <GridCell
-                key={k}
+                className="col-start-6 lg:col-start-10"
                 allianceColor={"blue"}
                 matchResult={m.winning_alliance === "blue" ? "winner" : "loser"}
-                className={x}
-                dq={m.alliances?.blue?.dq_team_keys?.includes(k ?? "")}
-                surrogate={m.alliances?.blue?.surrogate_team_keys?.includes(
-                  k ?? "",
-                )}
+                teamOrScore={"score"}
               >
-                <Link to={`/team/${k?.substring(3)}`}>{k?.substring(3)}</Link>
+                {m.alliances?.blue?.score}
               </GridCell>
-            ))}
-
-            {/* scores */}
-            <GridCell
-              className="col-start-6 row-start-1 lg:col-start-9"
-              allianceColor={"red"}
-              matchResult={m.winning_alliance === "red" ? "winner" : "loser"}
-              teamOrScore={"score"}
-            >
-              {m.alliances?.red?.score}
-            </GridCell>
-            <GridCell
-              className="col-start-6 lg:col-start-10"
-              allianceColor={"blue"}
-              matchResult={m.winning_alliance === "blue" ? "winner" : "loser"}
-              teamOrScore={"score"}
-            >
-              {m.alliances?.blue?.score}
-            </GridCell>
-          </div>
+            </div>
+          </Fragment>
         ))}
       </div>
     </div>

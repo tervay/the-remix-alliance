@@ -74,6 +74,6 @@
     @apply bg-background text-foreground;
   }
   a {
-    @apply text-blue-800;
+    @apply text-blue-800 hover:underline;
   }
 }

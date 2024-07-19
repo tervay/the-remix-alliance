@@ -7,7 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, parseDateString } from "@/lib/utils";
+import {
+  cn,
+  groupAwardsByCategory,
+  parseDateString,
+  sortAwards,
+  sortTeamKeysComparator,
+} from "@/lib/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Await,
@@ -16,10 +22,12 @@ import {
   defer,
   useLoaderData,
 } from "@remix-run/react";
-import { Fragment, Suspense } from "react";
+import { isEmpty } from "lodash-es";
+import { Fragment, Suspense, useMemo } from "react";
 import { promiseHash } from "remix-utils/promise";
 import {
   type Award,
+  type AwardRecipient,
   type Event,
   type EventRanking,
   type Team,
@@ -28,11 +36,12 @@ import {
   getEventAwards,
   getEventCopRs,
   getEventMatches,
+  getEventOpRs,
   getEventRankings,
   getEventTeams,
 } from "~/api/tba";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
-import Banner from "~/components/tba/banner";
+import Banner, { SvgBanner } from "~/components/tba/banner";
 import CoprBarChart from "~/components/tba/coprBarChart";
 import CoprScatterChart from "~/components/tba/coprScatterChart";
 import CoprTableView from "~/components/tba/coprTable";
@@ -54,6 +63,7 @@ import MdiFolderMediaOutline from "~icons/mdi/folder-media-outline";
 import MdiGraphBoxOutline from "~icons/mdi/graph-box-outline";
 import MdiRobot from "~icons/mdi/robot";
 import MdiTournament from "~icons/mdi/tournament";
+import { SvgGResizer } from "react-svg-resizer";
 
 function requiredData(eventKey: string) {
   return {
@@ -65,7 +75,8 @@ function requiredData(eventKey: string) {
 
 function delayedData(eventKey: string) {
   return {
-    oprs: getEventCopRs({ eventKey }),
+    coprs: getEventCopRs({ eventKey }),
+    oprs: getEventOpRs({ eventKey }),
     rankings: getEventRankings({ eventKey }),
     teams: getEventTeams({ eventKey }),
     awards: getEventAwards({ eventKey }),
@@ -122,14 +133,21 @@ export default function EventPage() {
     parentEvent,
     rankings,
     oprs,
+    coprs,
     teams,
     awards,
   } = useLoaderData<typeof loader>();
   const startDate = parseDateString(event.start_date);
   const endDate = parseDateString(event.end_date);
 
+  const insightsPromise = useMemo(
+    () => Promise.all([coprs, oprs]),
+    [coprs, oprs],
+  );
+
   return (
     <>
+      <SvgBanner title="WINNER" description="2024 EVENT" />
       <div className="flex flex-col mb-2.5">
         <h1 className="text-4xl mb-2.5 mt-5">
           {event.name} {event.year}
@@ -333,14 +351,18 @@ export default function EventPage() {
             )}
           /> */}
           <Suspense>
-            <Await resolve={oprs}>
-              {(data) => (
-                <div>
-                  <CoprScatterChart coprs={data} />
-                  <CoprBarChart coprs={data} />
-                  <CoprTableView eventOprs={data} eventYear={event.year} />
-                </div>
-              )}
+            <Await resolve={insightsPromise}>
+              {([coprs, oprs]) =>
+                isEmpty(coprs) ? (
+                  <pre>{JSON.stringify(oprs, undefined, 2)}</pre>
+                ) : (
+                  <div>
+                    <CoprScatterChart coprs={coprs} />
+                    <CoprBarChart coprs={coprs} />
+                    <CoprTableView eventOprs={coprs} eventYear={event.year} />
+                  </div>
+                )
+              }
             </Await>
           </Suspense>
         </TabsContent>
@@ -352,10 +374,38 @@ export default function EventPage() {
   );
 }
 
+function AwardRecipientLink({ recipient }: { recipient: AwardRecipient }) {
+  const teamLink = recipient.team_key ? (
+    <Link to="">{recipient.team_key?.substring(3)}</Link>
+  ) : (
+    <></>
+  );
+
+  if (recipient.awardee) {
+    if (recipient.team_key) {
+      return (
+        <>
+          {recipient.awardee} ({teamLink})
+        </>
+      );
+    }
+
+    return <>{recipient.awardee}</>;
+  }
+
+  if (recipient.team_key) {
+    return teamLink;
+  }
+
+  return <>n/a</>;
+}
+
 function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
+  sortAwards(awards);
+
   return (
-    <>
-      <div className="flex justify-evenly flex-wrap">
+    <div className="flex flex-wrap-reverse">
+      {/* <div className="flex justify-evenly content-start flex-wrap sm:basis-1/4 mt-8 sm:mt-4 gap-y-4">
         {awards
           .filter((a) => BLUE_BANNER_AWARDS.has(a.award_type))
           .map((a) => {
@@ -363,14 +413,14 @@ function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
               <Fragment key={a.award_type}>
                 {a.recipient_list.map((r) => (
                   <div
-                    className="flex flex-col basis-1/6"
+                    className="flex flex-col"
                     key={`${a.award_type}_${r.team_key}`}
                   >
                     <div className="text-2xl text-center font-bold">
                       {r.team_key?.substring(3)}
                     </div>
-                    <Banner
-                      title={"todo"}
+                    <SvgBanner
+                      title={a.name}
                       description={`${event.year} ${event.short_name}`}
                     />
                   </div>
@@ -378,40 +428,46 @@ function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
               </Fragment>
             );
           })}
-      </div>
-      <Table className="table-fixed w-3/5 mx-auto">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-left">Award</TableHead>
-            <TableHead className="text-right w-[10%]">Winner</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {awards
-            .map((award) =>
-              award.recipient_list.map((recipient) => (
-                <TableRow
-                  key={`${award.name}-${recipient.team_key}`}
-                  className={cn({
-                    "bg-banner text-white": BLUE_BANNER_AWARDS.has(
-                      award.award_type,
+      </div> */}
+
+      <div className="flow-root w-full sm:mt-6">
+        <dl className="-my-3 divide-y divide-gray-100 text-sm">
+          {awards.map((award) => (
+            <div
+              key={award.name}
+              className="grid grid-cols-1 gap-1 py-2 sm:grid-cols-3 sm:gap-4 sm:px-10"
+            >
+              <dt className="font-medium sm:col-span-2 text-gray-900">
+                {BLUE_BANNER_AWARDS.has(award.award_type) ? (
+                  <InlineIcon>
+                    <SvgBanner height={16} />
+                    {award.name}
+                  </InlineIcon>
+                ) : (
+                  award.name
+                )}
+              </dt>
+              <dd className="text-gray-700 sm:text-right">
+                {award.recipient_list
+                  .sort((a, b) =>
+                    sortTeamKeysComparator(
+                      a.team_key ?? "0",
+                      b.team_key ?? "0",
                     ),
-                  })}
-                >
-                  <TableCell>{award.name}</TableCell>
-                  <TableCell className="text-right">
-                    {recipient.team_key?.substring(3)}
-                  </TableCell>
-                </TableRow>
-              )),
-            )
-            .reduce((prev, curr, i) => {
-              prev.push(...curr);
-              return prev;
-            }, [])}
-        </TableBody>
-      </Table>
-    </>
+                  )
+                  .map((r, i) => [
+                    i > 0 && (r.awardee ? <br /> : ", "),
+                    <AwardRecipientLink
+                      recipient={r}
+                      key={`${award.award_type}-${r.awardee}-${r.team_key}`}
+                    />,
+                  ])}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
   );
 }
 
