@@ -1,3 +1,5 @@
+import { EventType } from "./EventType";
+
 // https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance/master/consts/award_type.py
 export enum AwardType {
   CHAIRMANS = 0,
@@ -159,3 +161,26 @@ export const AWARD_CATEGORIES: { [key in AwardCategory]: Set<AwardType> } = {
   [AwardCategory.SUBMITTED_AWARDS]: SUBMITTED_AWARDS,
   [AwardCategory.ROBOT_PERFORMANCE_AWARDS]: ROBOT_PERFORMANCE_AWARDS,
 };
+
+export function getNormalizedName(
+  awardType: AwardType,
+  eventType?: EventType,
+  year?: number,
+) {
+  switch (awardType) {
+    case AwardType.CHAIRMANS:
+      return (year ?? 0) >= 2023 ? "FIRST Impact Award" : "Chairman's Award";
+    case AwardType.CHAIRMANS_FINALIST:
+      return (year ?? 0) >= 2023
+        ? "FIRST Impact Award Finalist"
+        : "Chairman's Award Finalist";
+    case AwardType.WINNER:
+      return "Winner";
+    case AwardType.WOODIE_FLOWERS:
+      return eventType === EventType.CMP_FINALS
+        ? "Woodie Flowers Award"
+        : "Woodie Flowers Finalist Award";
+    default:
+      return "";
+  }
+}

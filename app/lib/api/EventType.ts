@@ -1,5 +1,5 @@
 // https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance/master/consts/event_type.py
-enum EventType {
+export enum EventType {
   REGIONAL = 0,
   DISTRICT = 1,
   DISTRICT_CMP = 2,

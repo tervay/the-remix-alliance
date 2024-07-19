@@ -1,15 +1,5 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  cn,
-  groupAwardsByCategory,
   parseDateString,
   sortAwards,
   sortTeamKeysComparator,
@@ -29,7 +19,6 @@ import {
   type Award,
   type AwardRecipient,
   type Event,
-  type EventRanking,
   type Team,
   getEvent,
   getEventAlliances,
@@ -41,7 +30,7 @@ import {
   getEventTeams,
 } from "~/api/tba";
 import AllianceSelectionTable from "~/components/tba/allianceTable";
-import Banner, { SvgBanner } from "~/components/tba/banner";
+import { AwardBanner, SvgBanner } from "~/components/tba/banner";
 import CoprBarChart from "~/components/tba/coprBarChart";
 import CoprScatterChart from "~/components/tba/coprScatterChart";
 import CoprTableView from "~/components/tba/coprTable";
@@ -63,7 +52,6 @@ import MdiFolderMediaOutline from "~icons/mdi/folder-media-outline";
 import MdiGraphBoxOutline from "~icons/mdi/graph-box-outline";
 import MdiRobot from "~icons/mdi/robot";
 import MdiTournament from "~icons/mdi/tournament";
-import { SvgGResizer } from "react-svg-resizer";
 
 function requiredData(eventKey: string) {
   return {
@@ -145,9 +133,25 @@ export default function EventPage() {
     [coprs, oprs],
   );
 
+  const quals = useMemo(
+    () => matches.filter((m) => m.comp_level === "qm"),
+    [matches],
+  );
+  const qualsTable = useMemo(
+    () => <MatchTable matches={quals} title="Qualification Results" />,
+    [quals],
+  );
+  const nonQuals = useMemo(
+    () => matches.filter((m) => m.comp_level !== "qm"),
+    [matches],
+  );
+  const nonQualsTable = useMemo(
+    () => <MatchTable matches={nonQuals} title="Playoff Results" />,
+    [nonQuals],
+  );
+
   return (
     <>
-      <SvgBanner title="WINNER" description="2024 EVENT" />
       <div className="flex flex-col mb-2.5">
         <h1 className="text-4xl mb-2.5 mt-5">
           {event.name} {event.year}
@@ -227,27 +231,6 @@ export default function EventPage() {
             Statbotics
           </Link>
         </InlineIcon>
-
-        {/* {event.district && (
-          <div>{event.district.display_name} District Event</div>
-        )} */}
-        {/* <div>
-          {startDate.toLocaleDateString("default", {
-            month: "long",
-            day: "numeric",
-          })}{" "}
-          to{" "}
-          {endDate.toLocaleDateString("default", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </div>
-        {event.week !== undefined && (
-          <div>
-            <Badge>Week {event.week + 1}</Badge>
-          </div>
-        )} */}
       </div>
 
       <Tabs defaultValue="results" className="">
@@ -292,29 +275,15 @@ export default function EventPage() {
         <TabsContent value="results">
           <div className="flex gap-4 flex-wrap lg:flex-nowrap">
             <div className="basis-full lg:basis-1/2">
-              <MatchTable
-                matches={matches.filter((m) => m.comp_level === "qm")}
-                title="Qualification Results"
-              />
+              {quals.length > 0 ? qualsTable : nonQualsTable}
             </div>
             <div className="basis-full lg:basis-1/2">
               <AllianceSelectionTable alliances={alliances} />
-              {/* <AllianceSelectionGrid alliances={alliances} /> */}
-              <MatchTable
-                matches={matches.filter((m) => m.comp_level !== "qm")}
-                title="Playoff Results"
-              />
+              {quals.length > 0 ? nonQualsTable : <></>}
             </div>
           </div>
         </TabsContent>
         <TabsContent value="rankings">
-          {/* <RankingsTab rankings={rankings} /> */}
-          {/* <MaybeComponent
-            query={rankingsQuery}
-            renderComponent={(data) => <RankingsTable rankings={data} />}
-            renderSkeleton={() => <div>Loading...</div>}
-          /> */}
-
           <Suspense>
             <Await resolve={rankings}>
               {(r) => (
@@ -343,13 +312,6 @@ export default function EventPage() {
           </Suspense>
         </TabsContent>
         <TabsContent value="insights">
-          {/* <MaybeComponent
-            query={oprsQuery}
-            renderSkeleton={() => <div>Loading...</div>}
-            renderComponent={(data) => (
-              <CoprTableView eventOprs={data} eventYear={event.year} />
-            )}
-          /> */}
           <Suspense>
             <Await resolve={insightsPromise}>
               {([coprs, oprs]) =>
@@ -376,7 +338,9 @@ export default function EventPage() {
 
 function AwardRecipientLink({ recipient }: { recipient: AwardRecipient }) {
   const teamLink = recipient.team_key ? (
-    <Link to="">{recipient.team_key?.substring(3)}</Link>
+    <Link to={`/team/${recipient.team_key.substring(3)}`}>
+      {recipient.team_key.substring(3)}
+    </Link>
   ) : (
     <></>
   );
@@ -402,10 +366,9 @@ function AwardRecipientLink({ recipient }: { recipient: AwardRecipient }) {
 
 function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
   sortAwards(awards);
-
   return (
     <div className="flex flex-wrap-reverse">
-      {/* <div className="flex justify-evenly content-start flex-wrap sm:basis-1/4 mt-8 sm:mt-4 gap-y-4">
+      <div className="flex justify-evenly content-start flex-wrap sm:basis-1/4 mt-8 sm:mt-4 gap-y-4">
         {awards
           .filter((a) => BLUE_BANNER_AWARDS.has(a.award_type))
           .map((a) => {
@@ -419,18 +382,15 @@ function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
                     <div className="text-2xl text-center font-bold">
                       {r.team_key?.substring(3)}
                     </div>
-                    <SvgBanner
-                      title={a.name}
-                      description={`${event.year} ${event.short_name}`}
-                    />
+                    <AwardBanner award={a} event={event} height={225} />
                   </div>
                 ))}
               </Fragment>
             );
           })}
-      </div> */}
+      </div>
 
-      <div className="flow-root w-full sm:mt-6">
+      <div className="flow-root w-full sm:basis-3/4 sm:mt-6">
         <dl className="-my-3 divide-y divide-gray-100 text-sm">
           {awards.map((award) => (
             <div
@@ -440,7 +400,7 @@ function AwardsTab({ awards, event }: { awards: Award[]; event: Event }) {
               <dt className="font-medium sm:col-span-2 text-gray-900">
                 {BLUE_BANNER_AWARDS.has(award.award_type) ? (
                   <InlineIcon>
-                    <SvgBanner height={16} />
+                    <SvgBanner height={"200%"} />
                     {award.name}
                   </InlineIcon>
                 ) : (
